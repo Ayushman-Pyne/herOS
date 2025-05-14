@@ -1,0 +1,275 @@
+:root {
+    --background-light: linear-gradient(135deg, #f3f4f6, #e2e8f0);
+    --text-light: #212529;
+    --button-bg-light: #007bff;
+    --button-hover-bg-light: #0056b3;
+    --button-primary-bg-light: #28a745;
+    --button-primary-hover-bg-light: #218838;
+    --image-shadow-light: rgba(0, 0, 0, 0.1);
+
+    --background-dark: linear-gradient(135deg, #1e1e1e, #2c2c2c);
+    --text-dark: #f5f5f5;
+    --button-bg-dark: #444;
+    --button-hover-bg-dark: #555;
+    --button-primary-bg-dark: #006400;
+    --button-primary-hover-bg-dark: #004d00;
+    --image-shadow-dark: rgba(255, 255, 255, 0.1);
+
+    --duration: 500ms;
+    --delay: 100ms;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background: var(--background-light);
+    color: var(--text-light);
+}
+
+.theme-light {
+    background: var(--background-light);
+    color: var(--text-light);
+}
+
+.theme-dark {
+    background: var(--background-dark);
+    color: var(--text-dark);
+}
+
+#Moon,
+#Sun {
+    transform-origin: 50% 50%;
+    transition: all 0.5s ease;
+}
+
+.theme-light #Moon {
+    transform: scale(0.5) rotate(90deg);
+    opacity: 0;
+}
+
+.theme-dark #Sun {
+    opacity: 0;
+}
+
+/* Add styles for the header */
+h1 {
+    font-size: 3rem;
+    text-align: center;
+    color: var(--text-light);
+    margin: 20px 0;
+    font-family: 'Arial', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    transition: color 0.3s ease;
+}
+
+.theme-dark h1 {
+    color: var(--text-dark);
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+/* Center-align h2 elements */
+h2 {
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* General button styles */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-light);
+    background-color: var(--button-bg-light);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 10px;
+    box-shadow: 0 4px 6px var(--image-shadow-light);
+}
+
+.btn:hover {
+    background-color: var(--button-hover-bg-light);
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(255, 255, 255, 0.15);
+}
+
+/* Primary button styles */
+.btn-primary {
+    background-color: var(--button-primary-bg-light);
+}
+
+.btn-primary:hover {
+    background-color: var(--button-primary-hover-bg-light);
+}
+
+/* Style the image */
+img {
+    display: block;
+    margin: 20px auto;
+    max-width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px var(--image-shadow-light);
+    margin-top: 10px; /* Adjust spacing above the image */
+}
+
+/* Add animation to the buttons */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.btn {
+    animation: bounce 2s infinite;
+}
+
+/* Align buttons beside each other */
+button {
+    display: inline-block;
+    margin: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+/* Add a container for buttons to center them horizontally */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px; /* Adjust spacing below buttons */
+}
+
+/* Outer circle transitions */
+.outer-circle {
+  transition-duration: var(--duration);
+}
+
+.theme-light #N {
+  transition-delay: 0;
+}
+
+.theme-light #NE {
+  transition-delay: calc(var(--delay) * 1);
+}
+
+.theme-light #SE {
+  transition-delay: calc(var(--delay) * 2);
+}
+
+.theme-light #S {
+  transition-delay: calc(var(--delay) * 3);
+}
+
+.theme-light #SW {
+  transition-delay: calc(var(--delay) * 4);
+}
+
+.theme-light #W {
+  transition-delay: calc(var(--delay) * 5);
+}
+
+.theme-light #NW {
+  transition-delay: calc(var(--delay) * 6);
+}
+
+.theme-dark #N {
+  transform: translate(0, 10px);
+}
+
+.theme-dark #NE {
+  transform: translate(-10px, 5px);
+}
+
+.theme-dark #SE {
+  transform: translate(-10px, -5px);
+}
+
+.theme-dark #S {
+  transform: translate(0px, -10px);
+}
+
+.theme-dark #SW {
+  transform: translate(10px, -5px);
+}
+
+.theme-dark #W {
+  transform: translate(10px, 0px);
+}
+
+.theme-dark #NW {
+  transform: translate(10px, 5px);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 12px;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
+
+body.dark-mode {
+    background: var(--background-dark);
+    color: var(--text-dark);
+}
+
+body.dark-mode h1 {
+    color: var(--text-dark);
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+body.dark-mode .btn {
+    background-color: var(--button-bg-dark);
+    color: var(--text-dark);
+    box-shadow: 0 4px 6px var(--image-shadow-dark);
+}
+
+body.dark-mode .btn:hover {
+    background-color: var(--button-hover-bg-dark);
+}
+
+body.dark-mode .btn-primary {
+    background-color: var(--button-primary-bg-dark);
+}
+
+body.dark-mode .btn-primary:hover {
+    background-color: var(--button-primary-hover-bg-dark);
+}
+
+body.dark-mode img {
+    box-shadow: 0 4px 6px var(--image-shadow-dark);
+}
