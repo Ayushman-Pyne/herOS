@@ -63,9 +63,21 @@ randomIndex = options.indexOf(this.randomOrder.pop()); // Get the next GIF in th
 
 // Preload all GIFs to optimize loading
 const preloadImages = () => {
+  const preloader = document.getElementById("preloader");
+  let loadedCount = 0;
+  const totalImages = options.length;
+
   options.forEach(option => {
     const img = new Image();
     img.src = option.src;
+    img.onload = () => {
+      loadedCount++;
+      if (loadedCount === totalImages) {
+        setTimeout(() => {
+          preloader.style.display = "none"; // Hide preloader after 3 seconds
+        }, 3000);
+      }
+    };
   });
 };
 
