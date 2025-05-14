@@ -273,3 +273,35 @@ body.dark-mode .btn-primary:hover {
 body.dark-mode img {
     box-shadow: 0 4px 6px var(--image-shadow-dark);
 }
+
+#confirm-container h1,
+#confirm-container h2 {
+    z-index: 0;
+}
+
+#confirm-container img {
+    position: absolute;
+    z-index: -2;
+    animation: float 3s ease-in-out infinite;
+}
+
+#confirm-container img:nth-child(3) {
+    top: 10%;
+    left: 20%;
+    transform: rotate(-15deg);
+}
+
+#confirm-container img:nth-child(4) {
+    bottom: 15%;
+    right: 25%;
+    transform: rotate(20deg);
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(5deg);
+    }
+}

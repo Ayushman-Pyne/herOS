@@ -159,3 +159,45 @@ yes.addEventListener("click", function() {
   triggerConfetti(); // Trigger confetti animation
 });
 
+// New functionality to randomize Pookie positions
+const randomizePookiePositions = () => {
+  const pookieImages = document.querySelectorAll("#confirm-container img");
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  const positions = [];
+
+  pookieImages.forEach((img) => {
+    const imgWidth = img.offsetWidth;
+    const imgHeight = img.offsetHeight;
+
+    let randomTop, randomLeft;
+    let isOverlapping;
+
+    do {
+      randomTop = Math.random() * (viewportHeight - imgHeight);
+      randomLeft = Math.random() * (viewportWidth - imgWidth);
+
+      isOverlapping = positions.some(pos => {
+        return (
+          randomLeft < pos.left + pos.width &&
+          randomLeft + imgWidth > pos.left &&
+          randomTop < pos.top + pos.height &&
+          randomTop + imgHeight > pos.top
+        );
+      });
+    } while (isOverlapping);
+
+    positions.push({ top: randomTop, left: randomLeft, width: imgWidth, height: imgHeight });
+
+    const randomRotation = Math.random() * 360 - 180 + "deg"; // Random rotation
+
+    img.style.position = "absolute";
+    img.style.top = randomTop + "px";
+    img.style.left = randomLeft + "px";
+    img.style.transform = `rotate(${randomRotation})`;
+  });
+};
+
+// Call the function every 3 seconds
+setInterval(randomizePookiePositions, 1000);
+
