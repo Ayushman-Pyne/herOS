@@ -1,0 +1,18 @@
+/* Variables */
+:root{
+    --icon-size:50px;
+}
+
+body{
+    background-image: url("../resources/Wallpapers/Wall1.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#nextWallpaper{
+    height: var(--icon-size);
+    width: var(--icon-size);
+    border-radius: 100%;
+    border: 1px solid red;
+    background-image: url("../resources/Wallpapers/Wall0.jpg");
+}

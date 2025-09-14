@@ -1,15 +1,15 @@
 const options = [
-    { alt: "puppy1", src: "../resources/1.gif", head: "Pretty Please?" },
-    { alt: "puppy2", src: "../resources/2.gif", head: "How about now?" },
-    { alt: "puppy3", src: "../resources/3.gif", head: "Still no?" },
-    { alt: "puppy4", src: "../resources/4.gif", head: "Are you sure?" },
-    { alt: "puppy5", src: "../resources/5.gif", head: "Last chance!" },
-    { alt: "puppy6", src: "../resources/6.gif", head: "Really?" },
-    { alt: "puppy7", src: "../resources/7.gif", head: "Think again!" },
-    { alt: "puppy8", src: "../resources/8.gif", head: "Why not?" },
-    { alt: "puppy9", src: "../resources/9.gif", head: "Please reconsider!" },
-    { alt: "puppy10", src: "../resources/10.gif", head: "One more time?" },
-    { alt: "puppy11", src: "../resources/11.gif", head: "Don't say no!" },
+    { alt: "puppy1", src: "../resources/stay/1.gif", head: "Pretty Please?" },
+    { alt: "puppy2", src: "../resources/stay/2.gif", head: "How about now?" },
+    { alt: "puppy3", src: "../resources/stay/3.gif", head: "Still no?" },
+    { alt: "puppy4", src: "../resources/stay/4.gif", head: "Are you sure?" },
+    { alt: "puppy5", src: "../resources/stay/5.gif", head: "Last chance!" },
+    { alt: "puppy6", src: "../resources/stay/6.gif", head: "Really?" },
+    { alt: "puppy7", src: "../resources/stay/7.gif", head: "Think again!" },
+    { alt: "puppy8", src: "../resources/stay/8.gif", head: "Why not?" },
+    { alt: "puppy9", src: "../resources/stay/9.gif", head: "Please reconsider!" },
+    { alt: "puppy10", src: "../resources/stay/10.gif", head: "One more time?" },
+    { alt: "puppy11", src: "../resources/stay/11.gif", head: "Don't say no!" },
 ];
 
 var yes = document.querySelector("#Yes");
