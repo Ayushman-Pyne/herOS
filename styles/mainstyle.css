@@ -4,7 +4,7 @@
 }
 
 body{
-    background-image: url("../resources/Wallpapers/Wall1.jpg");
+    /* background-image: url("../resources/Wallpapers/Wall1.jpg"); */
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -15,4 +15,9 @@ body{
     border-radius: 100%;
     border: 1px solid red;
     background-image: url("../resources/Wallpapers/Wall0.jpg");
+}
+
+.head{
+    display: block;
+    text-align: center;
 }
