@@ -49,5 +49,5 @@ options.forEach(option => {
 document.querySelector("#nextWallpaper").addEventListener("click", () => {
     console.log("clicked");
     body.style.backgroundImage = `url(${options[count].src})`;
-    count = count%12 + 1;
+    count = count%11 + 1;
 });
