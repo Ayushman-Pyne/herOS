@@ -1,4 +1,3 @@
-
 const options = [
     { alt: "Wall0", src: "resources/Wallpapers/Wall0.jpg" },
     { alt: "Wall1", src: "resources/Wallpapers/Wall1.jpg" },
