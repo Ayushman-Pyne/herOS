@@ -1,10 +1,10 @@
-/* Variables */
+/* Variables
 :root{
     --icon-size:50px;
 }
 
 body{
-    /* background-image: url("../resources/Wallpapers/Wall1.jpg"); */
+
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -20,4 +20,198 @@ body{
 .head{
     display: block;
     text-align: center;
+}
+
+ */
+
+
+ /* Variables */
+:root {
+    --bg-overlay: rgba(0, 0, 0, 0.6);
+    --text-color: #ffffff;
+    --card-bg: rgba(255, 255, 255, 0.1);
+    --btn-bg: rgba(255, 255, 255, 0.15);
+    --btn-border: rgba(255, 255, 255, 0.2);
+    --accent: #ff4757;
+    --transition: 0.3s ease;
+}
+
+.theme-light {
+    --bg-overlay: rgba(255, 255, 255, 0.3);
+    --text-color: #1e272e;
+    --card-bg: rgba(255, 255, 255, 0.6);
+    --btn-bg: rgba(255, 255, 255, 0.5);
+    --btn-border: rgba(255, 255, 255, 0.6);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    color: var(--text-color);
+    background-color: #333;
+    /* CSS Paths: ../ goes up one level */
+    background-image: url("../resources/Wallpapers/Wall0.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.5s ease-in-out;
+}
+
+/* Overlay */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: var(--bg-overlay);
+    z-index: -1;
+    transition: background 0.5s ease;
+}
+
+/* Centered Card */
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 3rem;
+    border-radius: 24px;
+    border: 1px solid var(--btn-border);
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    max-width: 90%;
+    width: 450px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+/* --- NEW GRID BUTTON STYLES --- */
+.menu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 columns */
+    gap: 15px;
+    width: 100%;
+}
+
+.menu-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background: var(--btn-bg);
+    border: 1px solid var(--btn-border);
+    border-radius: 12px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: var(--transition);
+    backdrop-filter: blur(4px);
+}
+
+.menu-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+    color: white;
+}
+
+/* Controls (Bottom Right) */
+.controls {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    background: var(--card-bg);
+    border: 1px solid var(--btn-border);
+    color: var(--text-color);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    transition: var(--transition);
+}
+
+button:hover {
+    background: var(--accent);
+    color: white;
+    transform: scale(1.1);
+    border-color: var(--accent);
+}
+
+/* SVG Styling */
+#Sun { display: block; }
+#Moon { display: none; }
+.theme-light #Sun { display: none; }
+.theme-light #Moon { display: block; }
+
+/* Preloader */
+#preloader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #1e272e;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    color: white;
+}
+
+.dots span {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin: 0 5px;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.dots span:nth-child(1) { animation-delay: -0.32s; }
+.dots span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+footer {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    pointer-events: none;
 }
