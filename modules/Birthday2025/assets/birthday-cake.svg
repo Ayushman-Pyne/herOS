@@ -1,0 +1,94 @@
+<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <defs>
+    <radialGradient id="cakeAura" cx="50%" cy="55%" r="48%">
+      <stop offset="0%" stop-color="#ff3b7d" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#ff1e6d" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cakeCocoa" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4a152d"/>
+      <stop offset="50%" stop-color="#2d0b1a"/>
+      <stop offset="100%" stop-color="#19040e"/>
+    </linearGradient>
+    <linearGradient id="cakeFrosting" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff6097"/>
+      <stop offset="50%" stop-color="#e61c65"/>
+      <stop offset="100%" stop-color="#a80740"/>
+    </linearGradient>
+    <radialGradient id="flameGlowHalo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff176" stop-opacity="0.95"/>
+      <stop offset="35%" stop-color="#ff9100" stop-opacity="0.75"/>
+      <stop offset="70%" stop-color="#ff1744" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#ff0055" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="flameBodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="25%" stop-color="#fff59d"/>
+      <stop offset="65%" stop-color="#ff9800"/>
+      <stop offset="100%" stop-color="#f50057"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ambient Glow behind Cake -->
+  <circle cx="300" cy="350" r="230" fill="url(#cakeAura)"/>
+
+  <!-- Cake Platter Stand -->
+  <ellipse cx="300" cy="515" rx="230" ry="24" fill="#1b0512" stroke="#ff4d8b" stroke-width="2"/>
+  <ellipse cx="300" cy="512" rx="220" ry="18" fill="#380d23" stroke="#ff79ad" stroke-width="1"/>
+
+  <!-- BOTTOM TIER -->
+  <path d="M120 405 Q300 445 480 405 L480 495 Q300 535 120 495 Z" fill="url(#cakeCocoa)" stroke="#ff4081" stroke-width="1"/>
+  <ellipse cx="300" cy="405" rx="180" ry="26" fill="#521832"/>
+  <!-- Bottom Tier Dripping Icing -->
+  <path d="M120 405 Q150 435 180 410 Q210 440 240 410 Q275 448 300 410 Q330 445 360 410 Q395 448 420 410 Q455 435 480 405 L480 425 Q450 448 420 430 Q390 465 360 430 Q330 460 300 430 Q270 465 240 430 Q210 460 180 430 Q150 452 120 425 Z" fill="url(#cakeFrosting)"/>
+
+  <!-- MIDDLE TIER -->
+  <path d="M165 315 Q300 350 435 315 L435 395 Q300 430 165 395 Z" fill="url(#cakeCocoa)" stroke="#ff4081" stroke-width="1"/>
+  <ellipse cx="300" cy="315" rx="135" ry="22" fill="#5c1c38"/>
+  <!-- Middle Tier Dripping Icing -->
+  <path d="M165 315 Q200 345 235 320 Q268 352 300 320 Q335 352 370 320 Q405 345 435 315 L435 332 Q405 355 370 335 Q335 365 300 335 Q268 365 235 335 Q200 355 165 332 Z" fill="url(#cakeFrosting)"/>
+
+  <!-- TOP TIER -->
+  <path d="M210 230 Q300 262 390 230 L390 305 Q300 335 210 305 Z" fill="url(#cakeCocoa)" stroke="#ff4081" stroke-width="1"/>
+  <ellipse cx="300" cy="230" rx="90" ry="17" fill="#692040"/>
+  <!-- Top Tier Dripping Icing -->
+  <path d="M210 230 Q240 255 270 238 Q300 265 330 238 Q360 255 390 230 L390 248 Q360 270 330 252 Q300 278 270 252 Q240 270 210 248 Z" fill="url(#cakeFrosting)"/>
+
+  <!-- Strawberry Rose Decorations -->
+  <g transform="translate(235, 222)">
+    <circle cx="0" cy="0" r="11" fill="#e91e63"/>
+    <circle cx="5" cy="-2" r="7" fill="#ff4081"/>
+    <circle cx="-3" cy="2" r="5" fill="#ff80ab"/>
+  </g>
+  <g transform="translate(365, 222)">
+    <circle cx="0" cy="0" r="11" fill="#e91e63"/>
+    <circle cx="-5" cy="-2" r="7" fill="#ff4081"/>
+    <circle cx="3" cy="2" r="5" fill="#ff80ab"/>
+  </g>
+  <g transform="translate(300, 226)">
+    <circle cx="0" cy="0" r="13" fill="#d81b60"/>
+    <circle cx="0" cy="-3" r="9" fill="#ff4081"/>
+    <circle cx="0" cy="0" r="5" fill="#ffb2dd"/>
+  </g>
+
+  <!-- CANDLE STICK -->
+  <rect x="294" y="155" width="12" height="68" rx="3" fill="#fff5f8" stroke="#f48fb1" stroke-width="1.5"/>
+  <!-- Candle Stripes -->
+  <path d="M294 172 L306 180 M294 188 L306 196 M294 204 L306 212" stroke="#e91e63" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- CANDLE WICK (from y:155 up to y:142) -->
+  <line x1="300" y1="155" x2="300" y2="142" stroke="#260413" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- CANDLE FLAME (Anchored precisely on wick at y:142) -->
+  <g id="candle-flame">
+    <!-- Large Radiant Glow Halo -->
+    <circle cx="300" cy="118" r="42" fill="url(#flameGlowHalo)"/>
+    
+    <!-- Teardrop Flame Body -->
+    <path d="M300 88 C316 112 312 128 307 136 C303 142 297 142 293 136 C288 128 284 112 300 88 Z" fill="url(#flameBodyGrad)"/>
+    
+    <!-- Inner Bright Core at wick tip -->
+    <ellipse cx="300" cy="138" rx="3.5" ry="5" fill="#80deea" opacity="0.85"/>
+    <circle cx="300" cy="136" r="2" fill="#ffffff"/>
+  </g>
+</svg>

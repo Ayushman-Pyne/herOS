@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#120612"/>
+      <stop offset="60%" stop-color="#361025"/>
+      <stop offset="100%" stop-color="#180715"/>
+    </linearGradient>
+    <linearGradient id="mountainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4d1633"/>
+      <stop offset="100%" stop-color="#240818"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="600" fill="url(#bgGrad3)"/>
+
+  <!-- Mountain Silhouettes -->
+  <path d="M-50 420 L150 250 L320 380 L480 230 L650 400 L650 600 L-50 600 Z" fill="url(#mountainGrad)" opacity="0.6"/>
+  <path d="M-50 480 L180 340 L380 460 L550 320 L650 440 L650 600 L-50 600 Z" fill="#200617"/>
+
+  <!-- Moon / Nebula Glow -->
+  <circle cx="460" cy="140" r="45" fill="#ff7eb3" opacity="0.25"/>
+  <circle cx="460" cy="140" r="30" fill="#ffd1e3" opacity="0.5"/>
+
+  <!-- Couple Silhouette Standing on Peak -->
+  <g transform="translate(190, 200)">
+    <!-- Holding hands on hilltop -->
+    <path d="M80 160 Q70 110 95 90 Q125 80 135 110 Q145 140 125 170 Z" fill="#12040e"/>
+    <path d="M50 320 Q70 190 110 180 Q150 200 160 320 Z" fill="#0d030a"/>
+
+    <path d="M150 170 Q140 120 165 95 Q195 85 205 115 Q215 145 195 175 Z" fill="#150510"/>
+    <path d="M135 320 Q155 195 185 185 Q225 210 235 320 Z" fill="#0e030b"/>
+
+    <!-- Glowing hearts constellation -->
+    <circle cx="140" cy="145" r="4" fill="#ff4b8b"/>
+    <path d="M140 85 C140 70 125 60 115 70 C105 80 115 100 140 120 C165 100 175 80 165 70 C155 60 140 70 140 85 Z" fill="#ff4b8b" opacity="0.9"/>
+  </g>
+
+  <text x="300" y="520" font-family="'Playfair Display', serif" font-size="28" fill="#ffd1e3" text-anchor="middle" font-weight="600" letter-spacing="2">TOGETHER FOREVER</text>
+  <text x="300" y="555" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" fill="#f472b6" text-anchor="middle" letter-spacing="1">Every Journey Beside You</text>
+</svg>

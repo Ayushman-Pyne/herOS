@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#140610"/>
+      <stop offset="45%" stop-color="#3d1226"/>
+      <stop offset="100%" stop-color="#6b1d42"/>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="60%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#ff8fab" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#d93b77" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#140610" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="600" height="600" fill="url(#bgGrad2)"/>
+  <circle cx="360" cy="180" r="140" fill="url(#sunGlow)"/>
+
+  <!-- Sunset rays and warm stars -->
+  <circle cx="150" cy="120" r="3" fill="#ffe5ec" opacity="0.8"/>
+  <circle cx="450" cy="90" r="2.5" fill="#ffe5ec" opacity="0.9"/>
+  <circle cx="510" cy="220" r="3" fill="#ffe5ec" opacity="0.7"/>
+
+  <!-- Couple gazing at sunset embrace -->
+  <g transform="translate(130, 110)">
+    <!-- Man silhouette looking at partner -->
+    <path d="M100 200 Q90 140 120 110 Q160 90 180 130 Q190 160 170 200 Z" fill="#200a18"/>
+    <path d="M60 380 Q90 230 150 210 Q210 240 230 380 Z" fill="#150510"/>
+    
+    <!-- Woman silhouette leaning into chest -->
+    <path d="M160 210 Q160 150 190 125 Q230 110 250 150 Q260 190 240 230 Z" fill="#2d0e22"/>
+    <path d="M190 135 Q220 95 255 145 Q275 220 260 310 Q230 270 200 230 Z" fill="#1e0717"/>
+    <path d="M170 380 Q210 240 260 230 Q320 260 330 380 Z" fill="#180613"/>
+    
+    <!-- Heart above hands -->
+    <path d="M195 240 C195 225 180 215 170 225 C160 235 170 255 195 275 C220 255 230 235 220 225 C210 215 195 225 195 240 Z" fill="#ff4b8b" opacity="0.95"/>
+  </g>
+
+  <text x="300" y="520" font-family="'Playfair Display', serif" font-size="28" fill="#ffd1e3" text-anchor="middle" font-weight="600" letter-spacing="2">OUR FAVORITE MOMENT</text>
+  <text x="300" y="555" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" fill="#f472b6" text-anchor="middle" letter-spacing="1">Golden Hour With You</text>
+</svg>

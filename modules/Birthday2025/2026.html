@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function() {
+        try {
+          var _fetch = typeof window !== 'undefined' && window.fetch ? window.fetch.bind(window) : undefined;
+          Object.defineProperty(window, 'fetch', {
+            get: function() { return _fetch; },
+            set: function(val) { _fetch = val; },
+            configurable: true,
+            enumerable: true,
+          });
+        } catch (err) {}
+      })();
+    </script>
+    <title>Access Our World - Romantic Birthday Celebration</title>
+    <meta name="description" content="An enchanting, interactive romantic birthday celebration experience with secret vault access, floating ambient hearts, polaroid gallery, love letter, and interactive birthday cake." />
+    <meta property="og:title" content="Access Our World - Romantic Birthday Celebration" />
+    <meta property="og:description" content="An enchanting, interactive romantic birthday celebration experience with secret vault access, floating ambient hearts, polaroid gallery, love letter, and interactive birthday cake." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CDN for static hosting -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="./css/style.css">
+  </head>
+  <body class="bg-[#0b0207] text-pink-100 min-h-screen flex flex-col justify-between overflow-x-hidden font-sans-clean selection:bg-pink-500/30 selection:text-pink-100 relative">
+    
+    <!-- Floating Ambient Hearts & Bokeh Canvas -->
+    <canvas id="hearts-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Top Right Floating Audio Header -->
+    <header class="fixed top-4 right-4 z-40 flex items-center gap-3">
+      <div class="relative">
+        <button
+          id="audio-toggle-btn"
+          class="relative p-2.5 rounded-full backdrop-blur-md transition-all duration-300 cursor-pointer border bg-black/40 border-pink-500/30 text-pink-300/70 hover:text-pink-200 hover:border-pink-400/60"
+          aria-label="Toggle romantic music"
+        >
+          <!-- Speaker Muted Icon -->
+          <svg id="audio-icon-speaker" class="w-4 h-4 text-pink-400/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+            <line x1="23" y1="9" x2="17" y2="15"/>
+            <line x1="17" y1="9" x2="23" y2="15"/>
+          </svg>
+          
+          <!-- Music Note Icon (hidden initially) -->
+          <svg id="audio-icon-music" class="w-4 h-4 text-pink-300 hidden animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18V5l12-2v13"/>
+            <circle cx="6" cy="18" r="3"/>
+            <circle cx="18" cy="16" r="3"/>
+          </svg>
+
+          <!-- Animated Visualizer Bars (hidden initially) -->
+          <div id="audio-bars" class="hidden items-end gap-0.5 h-3 w-3 absolute right-2.5 bottom-2.5">
+            <span class="w-0.5 bg-pink-400 rounded-full animate-pulse h-full"></span>
+            <span class="w-0.5 bg-pink-300 rounded-full animate-pulse h-2/3"></span>
+            <span class="w-0.5 bg-pink-400 rounded-full animate-pulse h-4/5"></span>
+          </div>
+        </button>
+
+        <div id="audio-tooltip" class="hidden absolute right-0 top-12 px-2.5 py-1 text-xs text-pink-200 bg-pink-950/90 border border-pink-500/30 rounded-md backdrop-blur-md whitespace-nowrap shadow-xl pointer-events-none">
+          Click to Play Music
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Screens Container -->
+    <main class="relative z-10 flex-1 flex items-center justify-center py-12 sm:py-16 px-4">
+      
+      <!-- ==========================================
+           SCREEN 1: ACCESS OUR WORLD (VAULT)
+           ========================================== -->
+      <div id="screen-1" class="screen active w-full max-w-md flex-col items-center">
+        <!-- Glowing Heart Lock Icon -->
+        <div class="relative mb-6 cursor-pointer animate-float-gentle">
+          <div class="absolute -inset-4 rounded-full bg-pink-500/20 blur-xl animate-pulse"></div>
+          <div class="relative w-20 h-20 rounded-full flex items-center justify-center bg-gradient-to-tr from-pink-900/60 via-pink-600/40 to-pink-500/30 border border-pink-400/50 shadow-[0_0_35px_rgba(255,59,125,0.45)]">
+            <svg class="w-10 h-10 text-pink-300 fill-pink-500/30" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+            <svg class="w-4 h-4 text-pink-100 absolute mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+        </div>
+
+        <h1 class="font-serif-luxury text-3xl sm:text-4xl font-normal text-pink-100 text-center tracking-wide mb-1 drop-shadow-[0_2px_15px_rgba(255,100,160,0.4)]">
+          Access Our World
+        </h1>
+        <p class="font-sans-clean text-xs sm:text-sm text-pink-300/80 text-center mb-8 tracking-wide">
+          A special place, just for you <span class="text-pink-400 inline-block animate-pulse">💕</span>
+        </p>
+
+        <!-- Vault Card -->
+        <div class="w-full glass-card-romantic rounded-3xl p-6 sm:p-8 neon-box-glow border border-pink-500/30 backdrop-blur-2xl">
+          <form id="vault-form" class="space-y-4">
+            <!-- User field -->
+            <div class="space-y-1.5">
+              <div class="relative flex items-center">
+                <span class="absolute left-3.5 text-pink-400/80">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </span>
+                <input
+                  type="text"
+                  id="vault-username"
+                  placeholder="Instagram ID"
+                  required
+                  class="w-full pl-10 pr-4 py-3 bg-black/40 hover:bg-black/50 focus:bg-black/60 border border-pink-500/25 focus:border-pink-400/70 rounded-xl text-sm text-pink-100 placeholder-pink-400/40 focus:outline-none transition-all duration-200"
+                />
+              </div>
+            </div>
+
+            <!-- Password field -->
+            <div class="space-y-1.5">
+              <div class="relative flex items-center">
+                <span class="absolute left-3.5 text-pink-400/80">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+                <input
+                  type="password"
+                  id="vault-password"
+                  placeholder="My Birthday DDMM"
+                  required
+                  class="w-full pl-10 pr-11 py-3 bg-black/40 hover:bg-black/50 focus:bg-black/60 border border-pink-500/25 focus:border-pink-400/70 rounded-xl text-sm text-pink-100 placeholder-pink-400/40 focus:outline-none transition-all duration-200 tracking-wider"
+                />
+                <button
+                  type="button"
+                  id="toggle-password-btn"
+                  class="absolute right-3.5 text-pink-400/70 hover:text-pink-200 transition-colors cursor-pointer"
+                  aria-label="Toggle password view"
+                >
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <button
+                type="submit"
+                class="relative w-full group overflow-hidden py-3.5 px-6 rounded-2xl bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 hover:from-pink-500 hover:to-rose-400 text-white font-medium text-sm tracking-wide shadow-[0_0_25px_rgba(236,72,153,0.45)] hover:shadow-[0_0_35px_rgba(236,72,153,0.65)] transition-all duration-300 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+              >
+                <span>Unlock Surprise</span>
+                <svg class="w-4 h-4 fill-white/80" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <footer class="mt-6 flex items-center gap-2 text-xs font-sans-clean text-pink-300/70 tracking-wide">
+          <span class="text-pink-400">💕</span>
+          <span>Made with Love by Ayushman</span>
+          <span class="text-pink-400">💕</span>
+        </footer>
+      </div>
+
+      <!-- ==========================================
+           SCREEN ERROR: 403 RESTRICTED ACCESS
+           ========================================== -->
+      <div id="screen-error" class="screen w-full max-w-md flex-col items-center text-center">
+        <!-- Glowing Warning Icon -->
+        <div class="relative mb-6 animate-float-gentle">
+          <div class="absolute -inset-4 rounded-full bg-rose-600/25 blur-2xl animate-pulse"></div>
+          <div class="relative w-20 h-20 rounded-full flex items-center justify-center bg-gradient-to-tr from-rose-950/80 via-red-900/50 to-rose-600/30 border border-rose-500/40 shadow-[0_0_40px_rgba(244,63,94,0.45)]">
+            <svg class="w-10 h-10 text-rose-300 drop-shadow-[0_0_12px_rgba(244,63,94,0.8)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+              <path d="m12 13-1-1 2-2-3-3 2-2"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Modern Status Kicker -->
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-rose-950/60 border border-rose-500/30 text-[11px] font-mono text-rose-300 tracking-widest uppercase mb-4 shadow-[0_0_15px_rgba(244,63,94,0.2)]">
+          <svg class="w-3.5 h-3.5 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v4M12 16h.01"/>
+          </svg>
+          <span>Restricted Sanctuary · 403</span>
+        </div>
+
+        <!-- Main Heading -->
+        <h1 class="font-serif-luxury text-2xl sm:text-4xl font-normal text-rose-100 tracking-wide mb-3 drop-shadow-[0_2px_15px_rgba(244,63,94,0.4)]">
+          This page was not made for you.
+        </h1>
+
+        <!-- Card Body -->
+        <div class="w-full glass-card-error rounded-3xl p-6 sm:p-8 backdrop-blur-2xl mt-2 mb-6 text-left">
+          <div class="space-y-3 font-sans-clean text-xs sm:text-sm text-rose-200/80 leading-relaxed">
+            <p>This sanctuary is a private celebration created exclusively for someone very special.</p>
+            <p class="text-rose-300/60 text-xs">If you are the intended recipient, please return to the gate and verify your Instagram ID and birthday.</p>
+          </div>
+
+          <div class="mt-5 pt-4 border-t border-rose-500/20 flex items-center justify-between text-xs text-rose-300/70 font-mono text-[11px]">
+            <span class="flex items-center gap-1.5">
+              <svg class="w-3 h-3 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <span>ACCESS_DENIED</span>
+            </span>
+            <span class="text-rose-400/80 font-sans-clean">Private Vault</span>
+          </div>
+        </div>
+
+        <!-- Return Button -->
+        <button id="return-to-gate-btn" class="group relative px-7 py-3 rounded-2xl bg-gradient-to-r from-rose-700 via-pink-600 to-rose-700 hover:from-rose-600 hover:to-pink-500 text-white font-medium text-xs sm:text-sm tracking-wide shadow-[0_0_25px_rgba(244,63,94,0.45)] hover:shadow-[0_0_35px_rgba(244,63,94,0.65)] transition-all duration-300 cursor-pointer flex items-center gap-2">
+          <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m12 19-7-7 7-7M19 12H5"/>
+          </svg>
+          <span>Return to Gate</span>
+        </button>
+      </div>
+
+      <!-- ==========================================
+           SCREEN 2: BIRTHDAY HERO
+           ========================================== -->
+      <div id="screen-2" class="screen w-full max-w-2xl flex-col items-center text-center">
+        <h2 class="font-serif-luxury text-3xl sm:text-5xl font-normal tracking-wider text-pink-100 uppercase drop-shadow-[0_2px_15px_rgba(255,100,160,0.5)]">
+          Happy
+        </h2>
+
+        <div class="relative my-1 sm:my-2 flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
+          <span class="font-cursive text-6xl sm:text-8xl md:text-9xl text-pink-400 drop-shadow-[0_0_20px_rgba(255,59,125,0.85)] tracking-normal leading-tight">
+            Birthday
+          </span>
+          <svg class="w-10 h-10 sm:w-16 sm:h-16 text-pink-500 fill-transparent stroke-[1.8] drop-shadow-[0_0_18px_rgba(255,59,125,0.9)] animate-pulse" viewBox="0 0 24 24">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          </svg>
+        </div>
+
+        <h1 class="font-serif-luxury text-4xl sm:text-6xl md:text-7xl font-medium tracking-wide text-white drop-shadow-[0_0_25px_rgba(255,120,170,0.7)] mb-4">
+          Debannita
+        </h1>
+
+        <div class="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-pink-950/40 border border-pink-500/30 text-xs sm:text-sm text-pink-200 tracking-wider mb-6 backdrop-blur-md shadow-[0_0_15px_rgba(236,72,153,0.2)]">
+          <span class="text-pink-400">💖</span>
+          <span class="font-medium">22 August</span>
+          <span class="text-pink-400">💖</span>
+        </div>
+
+        <p class="font-serif-luxury text-sm sm:text-base md:text-lg text-pink-200/90 max-w-lg mx-auto leading-relaxed italic mb-8 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+          "Today is all about you and all the happiness you bring into my life every single day."
+        </p>
+
+        <button
+          id="unfold-love-btn"
+          class="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 hover:from-pink-500 hover:to-rose-400 text-white font-medium text-sm tracking-wide shadow-[0_0_30px_rgba(236,72,153,0.5)] hover:shadow-[0_0_45px_rgba(236,72,153,0.75)] transition-all duration-300 cursor-pointer flex items-center gap-2"
+        >
+          <span>Unfold Love</span>
+          <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        </button>
+      </div>
+
+      <!-- ==========================================
+           SCREEN 3: OUR PRECIOUS MEMORIES
+           ========================================== -->
+      <div id="screen-3" class="screen w-full max-w-6xl flex-col items-center">
+        <div class="text-center mb-8 sm:mb-12">
+          <h2 class="font-serif-luxury text-2xl sm:text-4xl text-pink-100 font-normal tracking-wide drop-shadow-[0_2px_15px_rgba(255,100,160,0.5)] flex items-center justify-center gap-2">
+            <span class="text-pink-400">💕</span>
+            <span>Our Precious Memories</span>
+            <span class="text-pink-400">💕</span>
+          </h2>
+          <p class="font-sans-clean text-xs sm:text-sm text-pink-300/80 mt-1 tracking-wide">
+            Moments that mean everything
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 w-full max-w-5xl justify-items-center mb-10">
+          <!-- Polaroid 1 -->
+          <div class="polaroid-card group relative cursor-pointer select-none transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-3 hover:scale-[1.04] hover:!rotate-0 will-change-transform" data-id="mem-1" style="transform: rotate(-3deg);">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-20 w-8 h-4 bg-pink-400/80 rounded-sm shadow-md border border-pink-200/40 flex items-center justify-center transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
+              <svg class="w-2.5 h-2.5 text-white fill-white" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            </div>
+            <div class="w-56 sm:w-60 bg-stone-100 p-3.5 pb-7 rounded-sm shadow-[0_15px_35px_rgba(0,0,0,0.65),0_0_20px_rgba(255,75,139,0.2)] group-hover:shadow-[0_25px_50px_rgba(0,0,0,0.75),0_0_35px_rgba(255,75,139,0.45)] border border-stone-200 transition-shadow duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]">
+              <div class="relative aspect-[4/5] w-full bg-stone-900 overflow-hidden rounded-xs border border-stone-300">
+                <img src="./assets/polaroid-1.svg" alt="Our Smile" class="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
+              </div>
+              <div class="pt-3.5 text-center">
+                <p class="font-script text-xl text-stone-800 tracking-wide font-semibold">Our Smile</p>
+                <p class="text-[10px] text-stone-500 font-sans-clean mt-0.5 tracking-wider uppercase">Pure Happiness</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Polaroid 2 -->
+          <div class="polaroid-card group relative cursor-pointer select-none transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-3 hover:scale-[1.04] hover:!rotate-0 will-change-transform" data-id="mem-2" style="transform: rotate(2deg);">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-20 w-8 h-4 bg-pink-400/80 rounded-sm shadow-md border border-pink-200/40 flex items-center justify-center transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
+              <svg class="w-2.5 h-2.5 text-white fill-white" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            </div>
+            <div class="w-56 sm:w-60 bg-stone-100 p-3.5 pb-7 rounded-sm shadow-[0_15px_35px_rgba(0,0,0,0.65),0_0_20px_rgba(255,75,139,0.2)] group-hover:shadow-[0_25px_50px_rgba(0,0,0,0.75),0_0_35px_rgba(255,75,139,0.45)] border border-stone-200 transition-shadow duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]">
+              <div class="relative aspect-[4/5] w-full bg-stone-900 overflow-hidden rounded-xs border border-stone-300">
+                <img src="./assets/polaroid-2.svg" alt="Our Favorite Moment" class="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
+              </div>
+              <div class="pt-3.5 text-center">
+                <p class="font-script text-xl text-stone-800 tracking-wide font-semibold">Our Favorite Moment</p>
+                <p class="text-[10px] text-stone-500 font-sans-clean mt-0.5 tracking-wider uppercase">Golden Hour Glow</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Polaroid 3 -->
+          <div class="polaroid-card group relative cursor-pointer select-none transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-3 hover:scale-[1.04] hover:!rotate-0 will-change-transform" data-id="mem-3" style="transform: rotate(-2deg);">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-20 w-8 h-4 bg-pink-400/80 rounded-sm shadow-md border border-pink-200/40 flex items-center justify-center transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
+              <svg class="w-2.5 h-2.5 text-white fill-white" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            </div>
+            <div class="w-56 sm:w-60 bg-stone-100 p-3.5 pb-7 rounded-sm shadow-[0_15px_35px_rgba(0,0,0,0.65),0_0_20px_rgba(255,75,139,0.2)] group-hover:shadow-[0_25px_50px_rgba(0,0,0,0.75),0_0_35px_rgba(255,75,139,0.45)] border border-stone-200 transition-shadow duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]">
+              <div class="relative aspect-[4/5] w-full bg-stone-900 overflow-hidden rounded-xs border border-stone-300">
+                <img src="./assets/polaroid-3.svg" alt="Together Forever" class="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
+              </div>
+              <div class="pt-3.5 text-center">
+                <p class="font-script text-xl text-stone-800 tracking-wide font-semibold">Together Forever</p>
+                <p class="text-[10px] text-stone-500 font-sans-clean mt-0.5 tracking-wider uppercase">Mountain Adventure</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Polaroid 4 -->
+          <div class="polaroid-card group relative cursor-pointer select-none transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] hover:-translate-y-3 hover:scale-[1.04] hover:!rotate-0 will-change-transform" data-id="mem-4" style="transform: rotate(3deg);">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-20 w-8 h-4 bg-pink-400/80 rounded-sm shadow-md border border-pink-200/40 flex items-center justify-center transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
+              <svg class="w-2.5 h-2.5 text-white fill-white" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            </div>
+            <div class="w-56 sm:w-60 bg-stone-100 p-3.5 pb-7 rounded-sm shadow-[0_15px_35px_rgba(0,0,0,0.65),0_0_20px_rgba(255,75,139,0.2)] group-hover:shadow-[0_25px_50px_rgba(0,0,0,0.75),0_0_35px_rgba(255,75,139,0.45)] border border-stone-200 transition-shadow duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]">
+              <div class="relative aspect-[4/5] w-full bg-stone-900 overflow-hidden rounded-xs border border-stone-300">
+                <img src="./assets/polaroid-4.svg" alt="My Happy Place" class="w-full h-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105">
+              </div>
+              <div class="pt-3.5 text-center">
+                <p class="font-script text-xl text-stone-800 tracking-wide font-semibold">My Happy Place</p>
+                <p class="text-[10px] text-stone-500 font-sans-clean mt-0.5 tracking-wider uppercase">Cozy Moments</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button id="play-movie-btn" class="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 hover:from-pink-500 hover:to-rose-400 text-white font-medium text-sm tracking-wide shadow-[0_0_30px_rgba(236,72,153,0.5)] transition-all cursor-pointer flex items-center gap-2">
+          <span>Play My Movie</span>
+          <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+        </button>
+      </div>
+
+      <!-- ==========================================
+           SCREEN 4: OUR SPECIAL VIDEO
+           ========================================== -->
+      <div id="screen-4" class="screen w-full max-w-4xl flex-col items-center">
+        <div class="text-center mb-6">
+          <h2 class="font-serif-luxury text-2xl sm:text-4xl text-pink-100 font-normal tracking-wide drop-shadow-[0_2px_15px_rgba(255,100,160,0.5)] flex items-center justify-center gap-2">
+            <span class="text-pink-400">💕</span>
+            <span>Our Special Video</span>
+            <span class="text-pink-400">💕</span>
+          </h2>
+        </div>
+
+        <div id="video-wrapper" class="relative w-full aspect-video rounded-3xl overflow-hidden border-2 border-pink-500/40 bg-black/90 shadow-[0_0_50px_rgba(255,59,125,0.35)] flex flex-col justify-end group">
+          <video id="special-video" src="./assets/special-video.mp4" poster="./assets/video-cover.svg" class="absolute inset-0 w-full h-full object-cover"></video>
+
+          <!-- Central Play Button Overlay -->
+          <div id="center-play-btn" class="absolute inset-0 flex items-center justify-center bg-black/35 backdrop-blur-xs cursor-pointer">
+            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center bg-gradient-to-tr from-pink-600 via-rose-500 to-pink-500 text-white shadow-[0_0_35px_rgba(255,59,125,0.8)] border border-pink-200/50">
+              <svg class="w-8 h-8 sm:w-10 sm:h-10 fill-white ml-1.5" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            </div>
+          </div>
+
+          <!-- Video Control Bar -->
+          <div class="relative z-20 w-full px-4 sm:px-6 py-3 bg-gradient-to-t from-black/90 via-black/60 to-transparent flex flex-col gap-2">
+            <input type="range" id="video-scrub" min="0" max="165" value="0" class="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-pink-500">
+            <div class="flex items-center justify-between text-xs text-pink-200">
+              <div class="flex items-center gap-3">
+                <button id="video-play-btn" class="p-1 text-pink-300 hover:text-white cursor-pointer">
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                </button>
+                <span id="video-time" class="font-mono text-[11px] text-pink-200/90 tracking-wider">00:00 / 02:45</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <button id="video-mute-btn" class="p-1 text-pink-300 hover:text-white cursor-pointer">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                </button>
+                <button id="video-fs-btn" class="p-1 text-pink-300 hover:text-white cursor-pointer">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <button id="final-surprise-btn" class="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 hover:from-pink-500 hover:to-rose-400 text-white font-medium text-sm tracking-wide shadow-[0_0_30px_rgba(236,72,153,0.5)] transition-all cursor-pointer flex items-center gap-2">
+            <span>Final Surprise</span>
+            <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           SCREEN 5: A LETTER FROM Ayushman
+           ========================================== -->
+      <div id="screen-5" class="screen w-full max-w-2xl flex-col items-center">
+        <div class="text-center mb-6">
+          <h2 class="font-serif-luxury text-2xl sm:text-4xl text-pink-100 font-normal tracking-wide drop-shadow-[0_2px_15px_rgba(255,100,160,0.5)] flex items-center justify-center gap-2">
+            <span class="text-pink-400">💕</span>
+            <span>A Letter From Ayushman</span>
+            <span class="text-pink-400">💕</span>
+          </h2>
+          <p class="font-sans-clean text-xs sm:text-sm text-pink-300/80 mt-1 tracking-wide">
+            Written with all my heart
+          </p>
+        </div>
+
+        <!-- Interactive Envelope Container with Wax Seal -->
+        <div class="relative w-full envelope-container max-w-xl">
+          <div class="absolute -inset-2 bg-gradient-to-r from-pink-600/20 via-rose-500/15 to-pink-600/20 rounded-3xl blur-xl"></div>
+          
+          <div id="envelope-wrapper" class="envelope-wrapper relative w-full overflow-visible rounded-3xl border border-pink-400/35 bg-gradient-to-b from-[#1c0814]/90 via-[#15050f]/95 to-[#0e020a]/98 shadow-[0_0_50px_rgba(255,59,125,0.35)] backdrop-blur-2xl">
+            
+            <!-- Envelope Top Flap (Triangular flap folded down over letter) -->
+            <div id="envelope-flap" class="envelope-flap absolute top-0 left-0 right-0 h-40 sm:h-48 overflow-hidden rounded-t-3xl pointer-events-none">
+              <svg class="w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.6)]" viewBox="0 0 500 200" preserveAspectRatio="none">
+                <!-- Flap triangle gradient -->
+                <defs>
+                  <linearGradient id="flapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#3b1025"/>
+                    <stop offset="50%" stop-color="#240716"/>
+                    <stop offset="100%" stop-color="#190410"/>
+                  </linearGradient>
+                </defs>
+                <polygon points="0,0 500,0 250,190" fill="url(#flapGrad)" stroke="#ff4b8b" stroke-opacity="0.35" stroke-width="1.5"/>
+                <!-- Flap highlight lines -->
+                <line x1="0" y1="0" x2="250" y2="190" stroke="#ff79ad" stroke-opacity="0.4" stroke-width="1"/>
+                <line x1="500" y1="0" x2="250" y2="190" stroke="#ff4081" stroke-opacity="0.25" stroke-width="1"/>
+              </svg>
+            </div>
+
+            <!-- Wax Seal Element (Click to Break & Open) -->
+            <div id="wax-seal" class="wax-seal group" aria-label="Break Wax Seal to Open Letter" role="button" tabindex="0">
+              <div class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center animate-seal-pulse">
+                <!-- Outer glowing aura -->
+                <div class="absolute -inset-2 rounded-full bg-rose-600/35 blur-md group-hover:bg-rose-500/50 transition-colors pointer-events-none"></div>
+                
+                <!-- Wax medallion body -->
+                <svg class="w-full h-full overflow-visible" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <radialGradient id="waxRed" cx="40%" cy="35%" r="65%">
+                      <stop offset="0%" stop-color="#ff4071"/>
+                      <stop offset="45%" stop-color="#c2185b"/>
+                      <stop offset="85%" stop-color="#880e4f"/>
+                      <stop offset="100%" stop-color="#4a0525"/>
+                    </radialGradient>
+                    <!-- Exact organic shadow calculated strictly from the wax shape silhouette -->
+                    <filter id="waxShapeShadow" x="-30%" y="-30%" width="170%" height="170%">
+                      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity="0.8"/>
+                      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#4a0525" flood-opacity="0.5"/>
+                    </filter>
+                    <filter id="waxIndent" x="-20%" y="-20%" width="140%" height="140%">
+                      <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="#2a0214" flood-opacity="0.9"/>
+                    </filter>
+                  </defs>
+                  
+                  <!-- Group rendering with exact organic silhouette drop shadow -->
+                  <g filter="url(#waxShapeShadow)">
+                    <!-- Irregular dripped wax circle perimeter -->
+                    <path d="M50,6 C64,5 78,10 87,20 C96,30 96,46 93,60 C90,74 81,87 68,93 C55,98 38,96 26,89 C14,82 5,69 6,55 C7,41 12,28 22,17 C31,7 41,6 50,6 Z" fill="url(#waxRed)" stroke="#ff79ad" stroke-width="1.2" stroke-opacity="0.4"/>
+                    
+                    <!-- Inner debossed seal rim -->
+                    <circle cx="50" cy="50" r="33" fill="#9c1549" stroke="#560729" stroke-width="2" filter="url(#waxIndent)"/>
+                    <circle cx="50" cy="50" r="30" fill="none" stroke="#ff79ad" stroke-width="0.8" stroke-dasharray="2,2" stroke-opacity="0.7"/>
+                    
+                    <!-- Seal Heart & Monogram Stamp -->
+                    <path d="M50 38 C47 34 40 33 37 38 C33 43 36 50 50 62 C64 50 67 43 63 38 C60 33 53 34 50 38 Z" fill="#ffd1dc" fill-opacity="0.9" filter="url(#waxIndent)"/>
+                    <text x="50" y="52" font-family="'Great Vibes', cursive" font-size="14" fill="#690a33" text-anchor="middle" font-weight="bold">A</text>
+                  </g>
+                </svg>
+              </div>
+
+              <!-- Interactive prompt at upper right corner of the seal -->
+              <div id="seal-hint" class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 whitespace-nowrap px-3.5 py-1 rounded-full bg-rose-950/95 border border-rose-500/40 text-[11px] font-sans-clean text-rose-200 tracking-wider flex items-center gap-1.5 shadow-lg group-hover:bg-rose-900/90 group-hover:border-rose-400 group-hover:text-rose-100 transition-all pointer-events-none select-none z-20">
+                <span class="text-xs">💌</span>
+                <span>Click Seal to Open</span>
+                <span class="text-xs">✨</span>
+              </div>
+            </div>
+
+            <!-- Love Letter Sheet (Reveals smoothly upon opening) -->
+            <div id="letter-sheet" class="letter-sheet w-full p-6 sm:p-10 text-pink-100">
+              <div class="text-center mb-6 pt-3">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-950/60 border border-pink-500/30 text-[11px] text-pink-300 tracking-widest uppercase mb-3 font-mono">
+                  <span>✦ Sealed with Infinite Love ✦</span>
+                </div>
+                <p class="font-serif-luxury text-sm sm:text-base text-pink-200/90 italic">
+                  To the most amazing person in my life,
+                </p>
+                <h3 class="font-cursive text-4xl sm:text-5xl text-pink-400 mt-1 drop-shadow-[0_0_15px_rgba(255,75,139,0.7)]">
+                  Debannita,
+                </h3>
+              </div>
+
+              <div class="space-y-4 font-serif-luxury text-center text-xs sm:text-sm md:text-base text-pink-100/95 leading-relaxed max-w-lg mx-auto">
+                <p>You make every day brighter just by being you.</p>
+                <p>Thank you for your love, your kindness and for being my constant happiness.</p>
+                <p>I am so lucky to have you in my life.</p>
+                <p>I hope this birthday brings you as much joy as you bring into mine.</p>
+                <p class="font-semibold text-pink-300 text-sm sm:text-base pt-2 flex items-center justify-center gap-1.5">
+                  <span>Happy Birthday, my love!</span>
+                  <span class="text-rose-400">❤️</span>
+                </p>
+              </div>
+
+              <div class="mt-8 text-center pt-5 border-t border-pink-500/25">
+                <p class="font-sans-clean text-xs text-pink-300/70 uppercase tracking-widest">Forever yours,</p>
+                <p class="font-cursive text-3xl sm:text-4xl text-pink-300 mt-1">Ayushman</p>
+              </div>
+            </div>
+
+            <!-- Envelope Bottom Flap/Pouch Decoration (Subtle V shape at bottom) -->
+            <div id="envelope-closed-pocket" class="p-16 sm:p-20 text-center flex flex-col items-center justify-center transition-opacity duration-500">
+              <span class="text-pink-400/30 text-5xl font-serif-luxury italic">💌</span>
+              <p class="text-xs text-pink-300/40 font-mono tracking-widest mt-2 uppercase">A Private Letter from Ayushman</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <button id="make-wish-btn" class="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 hover:from-pink-500 hover:to-rose-400 text-white font-medium text-sm tracking-wide shadow-[0_0_30px_rgba(236,72,153,0.5)] transition-all cursor-pointer flex items-center gap-2">
+            <span>Make a Birthday Wish</span>
+            <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           SCREEN 6: CAKE FINALE
+           ========================================== -->
+      <div id="screen-6" class="screen w-full max-w-3xl flex-col items-center text-center">
+        <div class="mb-4">
+          <h2 class="font-serif-luxury text-2xl sm:text-4xl font-normal text-pink-100 tracking-wider uppercase drop-shadow-[0_2px_15px_rgba(255,100,160,0.4)]">
+            Happy Birthday,
+          </h2>
+          <div class="flex items-center justify-center gap-3 mt-1 flex-wrap">
+            <span class="font-cursive text-5xl sm:text-7xl text-pink-400 drop-shadow-[0_0_20px_rgba(255,59,125,0.85)] leading-tight">
+              Debannita
+            </span>
+            <svg class="w-8 h-8 sm:w-12 sm:h-12 text-pink-500 fill-transparent stroke-[1.8] drop-shadow-[0_0_15px_rgba(255,59,125,0.9)] animate-pulse" viewBox="0 0 24 24">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="relative w-full max-w-sm sm:max-w-md my-2 flex flex-col items-center">
+          <div class="relative w-72 h-72 sm:w-88 sm:h-88 select-none flex items-center justify-center">
+            <svg class="w-full h-full object-contain filter drop-shadow-[0_0_30px_rgba(255,59,125,0.45)] animate-cake-float" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="cakeAura" cx="50%" cy="55%" r="48%">
+                  <stop offset="0%" stop-color="#ff3b7d" stop-opacity="0.35"/>
+                  <stop offset="60%" stop-color="#ff1e6d" stop-opacity="0.12"/>
+                  <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="cakeCocoa" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#4a152d"/>
+                  <stop offset="50%" stop-color="#2d0b1a"/>
+                  <stop offset="100%" stop-color="#19040e"/>
+                </linearGradient>
+                <linearGradient id="cakeFrosting" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#ff6097"/>
+                  <stop offset="50%" stop-color="#e61c65"/>
+                  <stop offset="100%" stop-color="#a80740"/>
+                </linearGradient>
+                <radialGradient id="flameGlowHalo" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#fff176" stop-opacity="0.95"/>
+                  <stop offset="35%" stop-color="#ff9100" stop-opacity="0.75"/>
+                  <stop offset="70%" stop-color="#ff1744" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#ff0055" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="flameBodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="25%" stop-color="#fff59d"/>
+                  <stop offset="65%" stop-color="#ff9800"/>
+                  <stop offset="100%" stop-color="#f50057"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Ambient Glow behind Cake -->
+              <circle cx="300" cy="350" r="230" fill="url(#cakeAura)" class="animate-aura-pulse"/>
+
+              <!-- Cake Platter Stand -->
+              <ellipse cx="300" cy="515" rx="230" ry="24" fill="#1b0512" stroke="#ff4d8b" stroke-width="2"/>
+              <ellipse cx="300" cy="512" rx="220" ry="18" fill="#380d23" stroke="#ff79ad" stroke-width="1"/>
+
+              <!-- BOTTOM TIER -->
+              <path d="M120 405 Q300 445 480 405 L480 495 Q300 535 120 495 Z" fill="url(#cakeCocoa)" stroke="#ff4081" stroke-width="1"/>
+              <ellipse cx="300" cy="405" rx="180" ry="26" fill="#521832"/>
+              <!-- Bottom Tier Dripping Icing -->
+              <path d="M120 405 Q150 435 180 410 Q210 440 240 410 Q275 448 300 410 Q330 445 360 410 Q395 448 420 410 Q455 435 480 405 L480 425 Q450 448 420 430 Q390 465 360 430 Q330 460 300 430 Q270 465 240 430 Q210 460 180 430 Q150 452 120 425 Z" fill="url(#cakeFrosting)"/>
+
+              <!-- MIDDLE TIER -->
+              <path d="M165 315 Q300 350 435 315 L435 395 Q300 430 165 395 Z" fill="url(#cakeCocoa)" stroke="#ff4081" stroke-width="1"/>
+              <ellipse cx="300" cy="315" rx="135" ry="22" fill="#5c1c38"/>
+              <!-- Middle Tier Dripping Icing -->
+              <path d="M165 315 Q200 345 235 320 Q268 352 300 320 Q335 352 370 320 Q405 345 435 315 L435 332 Q405 355 370 335 Q335 365 300 335 Q268 365 235 335 Q200 355 165 332 Z" fill="url(#cakeFrosting)"/>
+
+              <!-- TOP TIER -->
+              <path d="M210 230 Q300 262 390 230 L390 305 Q300 335 210 305 Z" fill="url(#cakeCocoa)" stroke="#ff4081" stroke-width="1"/>
+              <ellipse cx="300" cy="230" rx="90" ry="17" fill="#692040"/>
+              <!-- Top Tier Dripping Icing -->
+              <path d="M210 230 Q240 255 270 238 Q300 265 330 238 Q360 255 390 230 L390 248 Q360 270 330 252 Q300 278 270 252 Q240 270 210 248 Z" fill="url(#cakeFrosting)"/>
+
+              <!-- Strawberry Rose Decorations -->
+              <g transform="translate(235, 222)">
+                <circle cx="0" cy="0" r="11" fill="#e91e63"/>
+                <circle cx="5" cy="-2" r="7" fill="#ff4081"/>
+                <circle cx="-3" cy="2" r="5" fill="#ff80ab"/>
+              </g>
+              <g transform="translate(365, 222)">
+                <circle cx="0" cy="0" r="11" fill="#e91e63"/>
+                <circle cx="-5" cy="-2" r="7" fill="#ff4081"/>
+                <circle cx="3" cy="2" r="5" fill="#ff80ab"/>
+              </g>
+              <g transform="translate(300, 226)">
+                <circle cx="0" cy="0" r="13" fill="#d81b60"/>
+                <circle cx="0" cy="-3" r="9" fill="#ff4081"/>
+                <circle cx="0" cy="0" r="5" fill="#ffb2dd"/>
+              </g>
+
+              <!-- CANDLE STICK -->
+              <rect x="294" y="155" width="12" height="68" rx="3" fill="#fff5f8" stroke="#f48fb1" stroke-width="1.5"/>
+              <!-- Candle Stripes -->
+              <path d="M294 172 L306 180 M294 188 L306 196 M294 204 L306 212" stroke="#e91e63" stroke-width="2.5" stroke-linecap="round"/>
+
+              <!-- CANDLE WICK (from y:155 up to y:142) -->
+              <line x1="300" y1="155" x2="300" y2="142" stroke="#260413" stroke-width="2.5" stroke-linecap="round"/>
+
+              <!-- INTERACTIVE CANDLE FLAME (Anchored precisely on wick at y:142) -->
+              <g id="candle-flame" class="cursor-pointer">
+                <!-- Large Radiant Glow Halo -->
+                <circle cx="300" cy="118" r="42" fill="url(#flameGlowHalo)"/>
+                
+                <!-- Animated Flickering Teardrop Flame Body -->
+                <path d="M300 88 C316 112 312 128 307 136 C303 142 297 142 293 136 C288 128 284 112 300 88 Z" fill="url(#flameBodyGrad)" class="animate-flicker" style="transform-origin: 300px 142px;"/>
+                
+                <!-- Inner Bright Blue Core at wick tip -->
+                <ellipse cx="300" cy="138" rx="3.5" ry="5" fill="#80deea" opacity="0.85"/>
+                <circle cx="300" cy="136" r="2" fill="#ffffff"/>
+              </g>
+
+              <!-- SMOKE WISPS (Hidden by default, shown when blown out) -->
+              <g id="candle-smoke" style="display: none;">
+                <path d="M300 140 Q292 120 304 100 T296 65" fill="none" stroke="#fce4ec" stroke-width="3" stroke-linecap="round" opacity="0.6" class="animate-smoke"/>
+                <path d="M300 140 Q308 125 298 108 T306 75" fill="none" stroke="#f8bbd0" stroke-width="2" stroke-linecap="round" opacity="0.4" class="animate-smoke"/>
+              </g>
+            </svg>
+          </div>
+
+          <button id="blow-candle-btn" class="mt-2 px-5 py-2 rounded-full bg-pink-900/50 hover:bg-pink-800/60 border border-pink-400/40 text-xs sm:text-sm text-pink-100 shadow-[0_0_20px_rgba(255,75,139,0.4)] backdrop-blur-md inline-flex items-center gap-2 cursor-pointer transition-all">
+            <span>Tap to Blow Out The Candle 🎂</span>
+          </button>
+
+          <div id="wish-granted-badge" class="hidden mt-1 items-center gap-3">
+            <span class="px-4 py-1.5 rounded-full bg-pink-950/60 border border-pink-500/30 text-xs text-pink-300 flex items-center gap-1.5 shadow-[0_0_15px_rgba(255,75,139,0.3)]">
+              <span>Wish Granted! ✨</span>
+            </span>
+            <button id="relight-btn" class="text-xs text-pink-400/80 hover:text-pink-200 cursor-pointer hover:underline">
+              Relight
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-4 max-w-lg glass-card-romantic p-4 sm:p-6 rounded-2xl border border-pink-500/25 shadow-[0_0_35px_rgba(255,59,125,0.25)] text-pink-100">
+          <p class="font-serif-luxury text-sm sm:text-base leading-relaxed italic text-pink-200/95">
+            "Thank you for being my happiness, my love and my everything. Forever yours, Ayushman 💖"
+          </p>
+        </div>
+
+        <!-- Milestones -->
+        <div class="mt-6 flex items-center justify-center gap-2 sm:gap-4 flex-wrap">
+          <button class="milestone-btn px-4 py-2 rounded-full glass-card-lighter border border-pink-400/30 text-xs text-pink-200 hover:text-white hover:border-pink-300 transition-all flex items-center gap-1.5 cursor-pointer" data-id="our-story">
+            <span>Our Story</span>
+          </button>
+          <button class="milestone-btn px-4 py-2 rounded-full glass-card-lighter border border-pink-400/30 text-xs text-pink-200 hover:text-white hover:border-pink-300 transition-all flex items-center gap-1.5 cursor-pointer" data-id="our-love">
+            <span>Our Love</span>
+          </button>
+          <button class="milestone-btn px-4 py-2 rounded-full glass-card-lighter border border-pink-400/30 text-xs text-pink-200 hover:text-white hover:border-pink-300 transition-all flex items-center gap-1.5 cursor-pointer" data-id="forever-us">
+            <span>Forever Us</span>
+          </button>
+          <button class="milestone-btn px-4 py-2 rounded-full glass-card-lighter border border-pink-400/30 text-xs text-pink-200 hover:text-white hover:border-pink-300 transition-all flex items-center gap-1.5 cursor-pointer" data-id="always">
+            <span>Always</span>
+          </button>
+        </div>
+
+        <div class="mt-6">
+          <button id="replay-btn" class="text-xs text-pink-400/60 hover:text-pink-300 cursor-pointer">
+            Replay From Beginning ↺
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Stage Stepper (1 to 6) -->
+    <footer class="relative z-30 pb-6 pt-2 flex flex-col items-center gap-2">
+      <div class="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full bg-black/50 border border-pink-500/20 backdrop-blur-md shadow-lg">
+        <button id="prev-step-btn" class="p-1 rounded-full text-pink-300 hover:text-white transition-colors cursor-pointer" style="display: none;">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+
+        <button class="stepper-dot relative w-6 h-6 sm:w-7 sm:h-7 rounded-full text-[11px] font-bold flex items-center justify-center transition-all duration-300 cursor-pointer bg-gradient-to-tr from-pink-600 to-rose-500 text-white shadow-[0_0_12px_rgba(255,75,139,0.8)] scale-110 border border-pink-300/60" data-step="1">1</button>
+        <button class="stepper-dot relative w-6 h-6 sm:w-7 sm:h-7 rounded-full text-[11px] font-medium flex items-center justify-center transition-all duration-300 bg-zinc-900/40 text-zinc-600 border border-zinc-800/40 cursor-not-allowed opacity-40" data-step="2">2</button>
+        <button class="stepper-dot relative w-6 h-6 sm:w-7 sm:h-7 rounded-full text-[11px] font-medium flex items-center justify-center transition-all duration-300 bg-zinc-900/40 text-zinc-600 border border-zinc-800/40 cursor-not-allowed opacity-40" data-step="3">3</button>
+        <button class="stepper-dot relative w-6 h-6 sm:w-7 sm:h-7 rounded-full text-[11px] font-medium flex items-center justify-center transition-all duration-300 bg-zinc-900/40 text-zinc-600 border border-zinc-800/40 cursor-not-allowed opacity-40" data-step="4">4</button>
+        <button class="stepper-dot relative w-6 h-6 sm:w-7 sm:h-7 rounded-full text-[11px] font-medium flex items-center justify-center transition-all duration-300 bg-zinc-900/40 text-zinc-600 border border-zinc-800/40 cursor-not-allowed opacity-40" data-step="5">5</button>
+        <button class="stepper-dot relative w-6 h-6 sm:w-7 sm:h-7 rounded-full text-[11px] font-medium flex items-center justify-center transition-all duration-300 bg-zinc-900/40 text-zinc-600 border border-zinc-800/40 cursor-not-allowed opacity-40" data-step="6">6</button>
+
+        <button id="next-step-btn" class="p-1 rounded-full text-pink-300 hover:text-white transition-colors cursor-pointer" style="display: none;">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Memory Lightbox Modal -->
+    <div id="memory-modal" class="hidden fixed inset-0 z-50 items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+      <div class="relative max-w-md w-full glass-card-lighter p-6 rounded-3xl border border-pink-400/40 shadow-[0_0_60px_rgba(255,59,125,0.4)] text-pink-100">
+        <button id="close-memory-btn" class="absolute top-4 right-4 p-1.5 rounded-full bg-black/40 text-pink-300 hover:text-white cursor-pointer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="aspect-[4/3] w-full rounded-2xl overflow-hidden mb-4 border border-pink-500/30 bg-black/50">
+          <img id="modal-img" src="" alt="Memory" class="w-full h-full object-cover">
+        </div>
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 id="modal-title" class="font-serif-luxury text-xl font-medium text-pink-100"></h3>
+            <span id="modal-date" class="text-xs text-pink-300/80 font-sans-clean"></span>
+          </div>
+          <p id="modal-story" class="font-sans-clean text-xs text-pink-200/90 leading-relaxed italic pt-1"></p>
+        </div>
+        <div class="mt-5 pt-3 border-t border-pink-500/20 flex justify-end">
+          <button id="close-memory-btn-2" class="px-4 py-1.5 text-xs font-medium rounded-full bg-pink-600 hover:bg-pink-500 text-white cursor-pointer">
+            Close Memory
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestone Modal -->
+    <div id="milestone-modal" class="hidden fixed inset-0 z-50 items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+      <div class="relative max-w-sm w-full glass-card-romantic p-6 rounded-3xl border border-pink-400/40 shadow-[0_0_50px_rgba(255,59,125,0.4)] text-pink-100 text-center">
+        <button id="close-milestone-btn" class="absolute top-4 right-4 p-1 rounded-full text-pink-300/70 hover:text-white cursor-pointer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <h3 id="milestone-title" class="font-serif-luxury text-xl font-medium text-pink-100 mb-2"></h3>
+        <p id="milestone-content" class="font-serif-luxury text-xs sm:text-sm text-pink-200/90 leading-relaxed italic"></p>
+        <div class="mt-5 pt-3 border-t border-pink-500/20">
+          <button id="close-milestone-btn-2" class="px-4 py-1.5 text-xs font-medium rounded-full bg-pink-600 hover:bg-pink-500 text-white cursor-pointer">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main JavaScript Local Entry (Runs seamlessly on file://, GitHub Pages, or any server) -->
+    <script src="./js/main.js"></script>
+  </body>
+</html>

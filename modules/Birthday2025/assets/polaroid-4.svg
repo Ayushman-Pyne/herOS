@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="cafeGlow" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#4f172e"/>
+      <stop offset="60%" stop-color="#240a17"/>
+      <stop offset="100%" stop-color="#12040b"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="600" height="600" fill="url(#cafeGlow)"/>
+
+  <!-- Fairy lights garland -->
+  <path d="M-10 60 Q150 140 300 80 T610 100" fill="none" stroke="#68213f" stroke-width="2"/>
+  <circle cx="80" cy="100" r="7" fill="#ffe082" opacity="0.8"/>
+  <circle cx="200" cy="115" r="8" fill="#ff80ab" opacity="0.85"/>
+  <circle cx="340" cy="88" r="7" fill="#ffe082" opacity="0.8"/>
+  <circle cx="480" cy="98" r="8" fill="#ff4081" opacity="0.8"/>
+
+  <!-- Romantic Couple Laughing Cozy Moment -->
+  <g transform="translate(140, 140)">
+    <!-- Man smiling tenderly -->
+    <path d="M90 160 Q80 110 110 90 Q140 80 160 110 Q170 140 150 170 Z" fill="#290e1e"/>
+    <path d="M50 330 Q80 200 130 190 Q180 210 200 330 Z" fill="#170611"/>
+    
+    <!-- Woman laughing joyfully, touching his shoulder -->
+    <path d="M170 165 Q160 115 190 95 Q225 85 240 120 Q245 155 220 180 Z" fill="#381329"/>
+    <path d="M190 105 Q225 70 260 115 Q275 185 260 260 Q230 220 205 190 Z" fill="#220818"/>
+    <path d="M150 330 Q180 215 235 205 Q290 230 300 330 Z" fill="#1b0714"/>
+  </g>
+
+  <!-- Sweet Sparkles and Heart -->
+  <path d="M300 240 C300 225 285 215 275 225 C265 235 275 255 300 275 C325 255 335 235 325 225 C315 215 300 225 300 240 Z" fill="#ff4081" opacity="0.9"/>
+
+  <text x="300" y="520" font-family="'Playfair Display', serif" font-size="28" fill="#ffd1e3" text-anchor="middle" font-weight="600" letter-spacing="2">MY HAPPY PLACE</text>
+  <text x="300" y="555" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" fill="#f472b6" text-anchor="middle" letter-spacing="1">Wherever You Are Is Home</text>
+</svg>
