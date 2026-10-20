@@ -1,5 +1,16 @@
-// Register GSAP plugins
-gsap.registerPlugin(Draggable, InertiaPlugin, CustomEase, Flip);
+// Register GSAP plugins safely with graceful degradation
+if (typeof gsap !== "undefined") {
+  const plugins = [];
+  if (typeof Draggable !== "undefined") plugins.push(Draggable);
+  if (typeof InertiaPlugin !== "undefined") plugins.push(InertiaPlugin);
+  if (typeof CustomEase !== "undefined") plugins.push(CustomEase);
+  if (typeof Flip !== "undefined") plugins.push(Flip);
+  if (plugins.length > 0) {
+    try {
+      gsap.registerPlugin(...plugins);
+    } catch (e) {}
+  }
+}
 
 class PreloaderManager {
   constructor() {

@@ -1,11 +1,14 @@
 @import url("https://fonts.cdnfonts.com/css/thegoodmonolith");
+@import url("https://fonts.cdnfonts.com/css/pp-neue-montreal");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
 
 @font-face {
   font-family: "PPNeueMontreal";
-  src: url("https://assets.codepen.io/7558/PPNeueMontreal-Variable.woff2")
-    format("woff2");
+  src: local("PP Neue Montreal"), local("Neue Montreal"),
+       url("https://fonts.cdnfonts.com/s/72892/PPNeueMontreal-Regular.woff") format("woff");
   font-weight: 100 900;
   font-style: normal;
+  font-display: swap;
 }
 
 :root {
