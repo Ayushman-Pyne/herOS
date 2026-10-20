@@ -19,7 +19,7 @@ const storyData = {
       id: 'mem-1',
       title: 'Our Smile',
       subtitle: 'Pure Happiness',
-      imageSrc: './assets/polaroid-1.svg',
+      imageSrc: './assets/polaroid-1-hehe.jpg',
       fallbackSvg: './assets/polaroid-1.svg',
       date: 'First Date',
       story: 'The day we laughed until our stomachs hurt. I knew right then and there that your smile would forever be my favorite sight.',
@@ -29,7 +29,7 @@ const storyData = {
       id: 'mem-2',
       title: 'Our Favorite Moment',
       subtitle: 'Golden Hour Glow',
-      imageSrc: './assets/polaroid-2.svg',
+      imageSrc: './assets/polaroid-2-1.jpg',
       fallbackSvg: './assets/polaroid-2.svg',
       date: 'Sunset Beach Walk',
       story: 'Watching the sky turn into shades of gold and pink while listening to the waves. The world disappeared, and it was just us.',
@@ -39,7 +39,7 @@ const storyData = {
       id: 'mem-3',
       title: 'Together Forever',
       subtitle: 'Mountain Adventure',
-      imageSrc: './assets/polaroid-3.svg',
+      imageSrc: './assets/polaroid-3-4-3.jpg',
       fallbackSvg: './assets/polaroid-3.svg',
       date: 'Scenic Getaway',
       story: 'Standing at the peak overlooking the misty valleys, holding your hand. Every journey with you feels like an adventure.',
@@ -49,7 +49,7 @@ const storyData = {
       id: 'mem-4',
       title: 'My Happy Place',
       subtitle: 'Cozy Moments',
-      imageSrc: './assets/polaroid-4.svg',
+      imageSrc: './assets/polaroid-4.jpg',
       fallbackSvg: './assets/polaroid-4.svg',
       date: 'Quiet Evening Coffee',
       story: 'No matter where we are or what we do, anywhere with you is where I feel most at home and completely at peace.',
@@ -58,7 +58,7 @@ const storyData = {
   ],
   videoTitle: 'Our Special Video',
   videoSrc: './assets/special-video.mp4',
-  videoPoster: './assets/video-cover.svg',
+  videoPoster: './assets/video-cover.jpg',
   videoDuration: '02:45',
   letterTitle: 'A Letter From Ayushman',
   letterSubtitle: 'Written with all my heart',
@@ -104,50 +104,83 @@ function validateLogin(username, password) {
   return isValidUser && isValidPass;
 }
 
-// 3. Web Audio Romantic Synthesizer
+// 3. Web Audio Romantic Synthesizer & Audio Engine
 class RomanticAudioEngine {
   constructor() {
     this.ctx = null;
+    this.musicGain = null;
+    this.sfxGain = null;
     this.isMusicPlaying = false;
+    this.isSfxEnabled = true;
     this.musicInterval = null;
+    this.activeMusicOscillators = [];
+    this.audioElement = null;
+    this.audioElementChecked = false;
   }
 
   initContext() {
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       this.ctx = new AudioCtx();
+
+      // Master music bus
+      this.musicGain = this.ctx.createGain();
+      this.musicGain.gain.setValueAtTime(1, this.ctx.currentTime);
+      this.musicGain.connect(this.ctx.destination);
+
+      // Master sound effects bus
+      this.sfxGain = this.ctx.createGain();
+      this.sfxGain.gain.setValueAtTime(this.isSfxEnabled ? 1 : 0, this.ctx.currentTime);
+      this.sfxGain.connect(this.ctx.destination);
     }
     if (this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      return this.ctx.resume();
     }
+    return Promise.resolve();
   }
 
+  // --- Music Management ---
+
+  playMusicNote(freq, startTime, duration, gainValue = 0.12) {
+    if (!this.ctx || !this.isMusicPlaying) return;
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const filter = this.ctx.createBiquadFilter();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(800, startTime);
+      filter.frequency.exponentialRampToValueAtTime(350, startTime + duration);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(gainValue, startTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.musicGain || this.ctx.destination);
+
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.1);
+
+      this.activeMusicOscillators.push(osc);
+      osc.onended = () => {
+        const idx = this.activeMusicOscillators.indexOf(osc);
+        if (idx !== -1) this.activeMusicOscillators.splice(idx, 1);
+        try { osc.disconnect(); } catch (e) {}
+      };
+    } catch (e) {}
+  }
+
+  // Backward compatibility alias
   playNote(freq, startTime, duration, gainValue = 0.12) {
-    if (!this.ctx) return;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    const filter = this.ctx.createBiquadFilter();
-
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(freq, startTime);
-
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(800, startTime);
-    filter.frequency.exponentialRampToValueAtTime(350, startTime + duration);
-
-    gain.gain.setValueAtTime(0.0001, startTime);
-    gain.gain.linearRampToValueAtTime(gainValue, startTime + 0.05);
-    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.ctx.destination);
-
-    osc.start(startTime);
-    osc.stop(startTime + duration + 0.1);
+    this.playMusicNote(freq, startTime, duration, gainValue);
   }
 
-  playChordProgression() {
+  scheduleChords() {
     if (!this.ctx || !this.isMusicPlaying) return;
 
     const chords = [
@@ -157,105 +190,254 @@ class RomanticAudioEngine {
       [196.0, 293.66, 392.0, 440.0], // Gsus
     ];
 
-    const now = this.ctx.currentTime;
+    const now = Math.max(this.ctx.currentTime, 0.05);
     chords.forEach((chord, chordIdx) => {
       const chordStart = now + chordIdx * 3.5;
       chord.forEach((note, noteIdx) => {
-        this.playNote(note, chordStart + noteIdx * 0.45, 3.2, 0.08);
+        this.playMusicNote(note, chordStart + noteIdx * 0.45, 3.2, 0.08);
       });
       const highNote = chord[chord.length - 1] * 1.5;
-      this.playNote(highNote, chordStart + 1.8, 2.5, 0.04);
+      this.playMusicNote(highNote, chordStart + 1.8, 2.5, 0.04);
     });
+  }
+
+  playChordProgression() {
+    if (!this.ctx || !this.isMusicPlaying) return;
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume().then(() => {
+        if (this.isMusicPlaying) this.scheduleChords();
+      });
+      return;
+    }
+    this.scheduleChords();
+  }
+
+  startProceduralLoop() {
+    if (!this.isMusicPlaying) return;
+    this.playChordProgression();
+    if (this.musicInterval) clearInterval(this.musicInterval);
+    this.musicInterval = setInterval(() => {
+      if (this.isMusicPlaying) {
+        this.playChordProgression();
+      }
+    }, 14000);
+  }
+
+  startMusic() {
+    this.initContext();
+    this.stopMusic(); // Clean any previous notes/timers
+    this.isMusicPlaying = true;
+
+    // Smoothly ramp up music volume
+    if (this.ctx && this.musicGain) {
+      const t = this.ctx.currentTime;
+      this.musicGain.gain.cancelScheduledValues(t);
+      this.musicGain.gain.setValueAtTime(0.0001, t);
+      this.musicGain.gain.linearRampToValueAtTime(1, t + 0.06);
+    }
+
+    // Check if background-music.mp3 is provided
+    if (!this.audioElementChecked) {
+      this.audioElementChecked = true;
+      const testAudio = new Audio('./assets/background-music.mp3');
+      testAudio.loop = true;
+      testAudio.volume = 0.6;
+      testAudio.addEventListener('canplaythrough', () => {
+        this.audioElement = testAudio;
+        if (this.isMusicPlaying) {
+          // Fade procedural out and play mp3 track
+          this.activeMusicOscillators.forEach((osc) => {
+            try { osc.stop(); osc.disconnect(); } catch (e) {}
+          });
+          this.activeMusicOscillators = [];
+          if (this.musicInterval) {
+            clearInterval(this.musicInterval);
+            this.musicInterval = null;
+          }
+          this.audioElement.play().catch(() => {});
+        }
+      }, { once: true });
+      testAudio.addEventListener('error', () => {
+        this.audioElement = null;
+      }, { once: true });
+      testAudio.load();
+    }
+
+    if (this.audioElement) {
+      this.audioElement.play().catch(() => {
+        this.startProceduralLoop();
+      });
+    } else {
+      this.startProceduralLoop();
+    }
+  }
+
+  stopMusic() {
+    this.isMusicPlaying = false;
+
+    // 1. Clear recurring interval
+    if (this.musicInterval) {
+      clearInterval(this.musicInterval);
+      this.musicInterval = null;
+    }
+
+    // 2. Pause audio element if active
+    if (this.audioElement) {
+      try {
+        this.audioElement.pause();
+        this.audioElement.currentTime = 0;
+      } catch (e) {}
+    }
+
+    // 3. Smoothly fade out music bus in 35ms (eliminates audio clicks)
+    if (this.ctx && this.musicGain) {
+      const t = this.ctx.currentTime;
+      this.musicGain.gain.cancelScheduledValues(t);
+      this.musicGain.gain.setValueAtTime(this.musicGain.gain.value, t);
+      this.musicGain.gain.linearRampToValueAtTime(0.0001, t + 0.04);
+    }
+
+    // 4. Immediately stop and disconnect all scheduled oscillators
+    if (this.activeMusicOscillators && this.activeMusicOscillators.length > 0) {
+      const stopT = (this.ctx ? this.ctx.currentTime : 0) + 0.045;
+      this.activeMusicOscillators.forEach((osc) => {
+        try {
+          osc.stop(stopT);
+          setTimeout(() => {
+            try { osc.disconnect(); } catch (e) {}
+          }, 50);
+        } catch (e) {}
+      });
+      this.activeMusicOscillators = [];
+    }
   }
 
   toggleMusic() {
     this.initContext();
-    this.isMusicPlaying = !this.isMusicPlaying;
-
     if (this.isMusicPlaying) {
-      this.playChordProgression();
-      if (this.musicInterval) clearInterval(this.musicInterval);
-      this.musicInterval = setInterval(() => {
-        if (this.isMusicPlaying) {
-          this.playChordProgression();
-        }
-      }, 14000);
+      this.stopMusic();
+      return false;
     } else {
-      if (this.musicInterval) {
-        clearInterval(this.musicInterval);
-        this.musicInterval = null;
-      }
+      this.startMusic();
+      return true;
     }
-    return this.isMusicPlaying;
+  }
+
+  // --- Sound Effects (SFX) Management ---
+
+  toggleSfx() {
+    this.initContext();
+    this.isSfxEnabled = !this.isSfxEnabled;
+    if (this.sfxGain && this.ctx) {
+      const t = this.ctx.currentTime;
+      this.sfxGain.gain.cancelScheduledValues(t);
+      this.sfxGain.gain.setValueAtTime(this.isSfxEnabled ? 1 : 0, t);
+    }
+    return this.isSfxEnabled;
+  }
+
+  playSfxNote(freq, startTime, duration, gainValue = 0.1) {
+    if (!this.ctx || !this.isSfxEnabled) return;
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const filter = this.ctx.createBiquadFilter();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(1200, startTime);
+      filter.frequency.exponentialRampToValueAtTime(400, startTime + duration);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(gainValue, startTime + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.sfxGain || this.ctx.destination);
+
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.05);
+    } catch (e) {}
   }
 
   playChime() {
+    if (!this.isSfxEnabled) return;
     this.initContext();
     if (!this.ctx) return;
-    const now = this.ctx.currentTime;
+    const now = Math.max(this.ctx.currentTime, 0.01);
     const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51];
     notes.forEach((freq, i) => {
-      this.playNote(freq, now + i * 0.08, 1.8, 0.1);
+      this.playSfxNote(freq, now + i * 0.08, 1.8, 0.1);
     });
   }
 
   playBlowSound() {
+    if (!this.isSfxEnabled) return;
     this.initContext();
     if (!this.ctx) return;
-    const bufferSize = this.ctx.sampleRate * 0.6;
-    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
+    try {
+      const bufferSize = this.ctx.sampleRate * 0.6;
+      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
 
-    const noise = this.ctx.createBufferSource();
-    noise.buffer = buffer;
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = buffer;
 
-    const filter = this.ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(400, this.ctx.currentTime);
-    filter.Q.setValueAtTime(1.5, this.ctx.currentTime);
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(400, this.ctx.currentTime);
+      filter.Q.setValueAtTime(1.5, this.ctx.currentTime);
 
-    const gain = this.ctx.createGain();
-    gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.35, this.ctx.currentTime + 0.15);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.6);
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.35, this.ctx.currentTime + 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.6);
 
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.ctx.destination);
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.sfxGain || this.ctx.destination);
 
-    noise.start();
+      noise.start();
+    } catch (e) {}
   }
 
   playCelebrationChime() {
+    if (!this.isSfxEnabled) return;
     this.initContext();
     if (!this.ctx) return;
-    const now = this.ctx.currentTime;
+    const now = Math.max(this.ctx.currentTime, 0.01);
     const notes = [392.0, 523.25, 659.25, 783.99, 1046.5, 1318.51, 1567.98];
     notes.forEach((freq, idx) => {
-      this.playNote(freq, now + idx * 0.09, 2.2, 0.12);
+      this.playSfxNote(freq, now + idx * 0.09, 2.2, 0.12);
     });
   }
 
   playHeartClick() {
+    if (!this.isSfxEnabled) return;
     this.initContext();
     if (!this.ctx) return;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.08);
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.08);
 
-    gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.1);
 
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
+      osc.connect(gain);
+      gain.connect(this.sfxGain || this.ctx.destination);
 
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.1);
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.1);
+    } catch (e) {}
   }
 }
 
@@ -580,6 +762,8 @@ function initApp() {
 
   const audioToggleBtn = document.getElementById('audio-toggle-btn');
   const audioTooltip = document.getElementById('audio-tooltip');
+  const sfxToggleBtn = document.getElementById('sfx-toggle-btn');
+  const sfxTooltip = document.getElementById('sfx-tooltip');
   const stepperDots = document.querySelectorAll('.stepper-dot');
   const prevStepBtn = document.getElementById('prev-step-btn');
   const nextStepBtn = document.getElementById('next-step-btn');
@@ -618,12 +802,12 @@ function initApp() {
         currentStage < 6 && unlockedStages.has(currentStage + 1) ? 'block' : 'none';
   }
 
-  // Audio Toggle
-  audioToggleBtn?.addEventListener('click', () => {
-    const isPlaying = romanticAudio.toggleMusic();
+  // Background Music Toggle (Starts & Stops immediately)
+  function updateMusicUI(isPlaying) {
+    if (!audioToggleBtn) return;
     audioToggleBtn.className = isPlaying
       ? 'relative p-2.5 rounded-full backdrop-blur-md transition-all duration-300 cursor-pointer border bg-pink-600/30 border-pink-400 text-pink-200 shadow-[0_0_20px_rgba(255,75,139,0.5)] scale-105'
-      : 'relative p-2.5 rounded-full backdrop-blur-md transition-all duration-300 cursor-pointer border bg-black/40 border-pink-500/30 text-pink-300/70 hover:text-pink-200 hover:border-pink-400/60';
+      : 'relative p-2.5 rounded-full backdrop-blur-md transition-all duration-300 cursor-pointer border bg-black/40 border-pink-500/30 text-pink-300/70 hover:text-pink-200 hover:border-pink-400/60 shadow-lg';
 
     const visualizer = document.getElementById('audio-bars');
     const speakerIcon = document.getElementById('audio-icon-speaker');
@@ -633,8 +817,41 @@ function initApp() {
     if (speakerIcon) speakerIcon.style.display = isPlaying ? 'none' : 'block';
     if (musicIcon) musicIcon.style.display = isPlaying ? 'block' : 'none';
 
+    audioToggleBtn.setAttribute('title', isPlaying ? 'Romantic Music (Playing - Click to Stop)' : 'Romantic Music (Stopped - Click to Play)');
     if (audioTooltip) {
-      audioTooltip.textContent = isPlaying ? 'Romantic Melody Playing' : 'Click to Play Music';
+      audioTooltip.textContent = isPlaying ? 'Stop Music ⏸' : 'Play Music ▶';
+    }
+  }
+
+  audioToggleBtn?.addEventListener('click', () => {
+    const isPlaying = romanticAudio.toggleMusic();
+    updateMusicUI(isPlaying);
+  });
+
+  // Sound Effects (SFX) Toggle
+  function updateSfxUI(isEnabled) {
+    if (!sfxToggleBtn) return;
+    sfxToggleBtn.className = isEnabled
+      ? 'relative p-2.5 rounded-full backdrop-blur-md transition-all duration-300 cursor-pointer border bg-pink-600/30 border-pink-400 text-pink-200 shadow-[0_0_15px_rgba(255,75,139,0.35)] hover:border-pink-300'
+      : 'relative p-2.5 rounded-full backdrop-blur-md transition-all duration-300 cursor-pointer border bg-black/40 border-pink-500/30 text-pink-300/60 hover:text-pink-200 hover:border-pink-400/60 shadow-lg';
+
+    const sfxIconOn = document.getElementById('sfx-icon-on');
+    const sfxIconOff = document.getElementById('sfx-icon-off');
+
+    if (sfxIconOn) sfxIconOn.style.display = isEnabled ? 'block' : 'none';
+    if (sfxIconOff) sfxIconOff.style.display = isEnabled ? 'none' : 'block';
+
+    sfxToggleBtn.setAttribute('title', isEnabled ? 'Sound Effects (On - Click to Mute)' : 'Sound Effects (Muted - Click to Enable)');
+    if (sfxTooltip) {
+      sfxTooltip.textContent = isEnabled ? 'Sound Effects: On' : 'Sound Effects: Muted';
+    }
+  }
+
+  sfxToggleBtn?.addEventListener('click', () => {
+    const isEnabled = romanticAudio.toggleSfx();
+    updateSfxUI(isEnabled);
+    if (isEnabled) {
+      romanticAudio.playHeartClick();
     }
   });
 
@@ -717,63 +934,259 @@ function initApp() {
     showScreen(4);
   });
 
-  // Video Controls
+  // Video Controls & Player Engine
   const video = document.getElementById('special-video');
   const playBtn = document.getElementById('video-play-btn');
+  const videoPlayIcon = document.getElementById('video-play-icon');
+  const videoPauseIcon = document.getElementById('video-pause-icon');
   const centerPlayBtn = document.getElementById('center-play-btn');
   const scrubBar = document.getElementById('video-scrub');
   const timeDisplay = document.getElementById('video-time');
   const muteBtn = document.getElementById('video-mute-btn');
+  const volIconHigh = document.getElementById('vol-icon-high');
+  const volIconLow = document.getElementById('vol-icon-low');
+  const volIconMute = document.getElementById('vol-icon-mute');
+  const volumeSlider = document.getElementById('video-volume');
   const fsBtn = document.getElementById('video-fs-btn');
+  const fsIconEnter = document.getElementById('fs-icon-enter');
+  const fsIconExit = document.getElementById('fs-icon-exit');
   const videoWrapper = document.getElementById('video-wrapper');
 
-  let isVideoPlaying = false;
-  let videoCurrent = 0;
-  let videoDuration = 165;
-  let simulatedTimer = null;
+  let isUserScrubbing = false;
+  let lastVolume = 0.7; // default 70% volume
+
+  // 1. Initial configuration: by default always load up to 70% volume
+  if (video) {
+    video.volume = 0.7;
+    video.muted = false;
+  }
+  if (volumeSlider) {
+    volumeSlider.value = 0.7;
+  }
 
   function formatTime(s) {
-    const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60);
+    if (isNaN(s) || s === Infinity || s === null || s === undefined || s < 0) return '00:00';
+    const total = Math.floor(s);
+    const m = Math.floor(total / 60);
+    const sec = total % 60;
     return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+  }
+
+  function getVideoDuration() {
+    if (video && video.duration && !isNaN(video.duration) && video.duration > 0) {
+      return video.duration;
+    }
+    return 165; // fallback 2:45
+  }
+
+  // 2. Play / Pause State Controller
+  function updatePlayPauseUI(isPlaying) {
+    if (videoPlayIcon) videoPlayIcon.style.display = isPlaying ? 'none' : 'block';
+    if (videoPauseIcon) videoPauseIcon.style.display = isPlaying ? 'block' : 'none';
+    if (centerPlayBtn) centerPlayBtn.style.display = isPlaying ? 'none' : 'flex';
+    if (playBtn) playBtn.setAttribute('title', isPlaying ? 'Pause' : 'Play');
   }
 
   function toggleVideo() {
     romanticAudio.playHeartClick();
-    isVideoPlaying = !isVideoPlaying;
+    if (!video) return;
 
-    if (centerPlayBtn) {
-      centerPlayBtn.style.display = isVideoPlaying ? 'none' : 'flex';
-    }
-
-    if (video && video.duration) {
-      if (isVideoPlaying) video.play();
-      else video.pause();
+    if (video.paused || video.ended) {
+      video.play().catch(() => {});
     } else {
-      if (isVideoPlaying) {
-        simulatedTimer = setInterval(() => {
-          videoCurrent = (videoCurrent + 1) % videoDuration;
-          if (scrubBar) scrubBar.value = videoCurrent;
-          if (timeDisplay)
-            timeDisplay.textContent = `${formatTime(videoCurrent)} / ${formatTime(videoDuration)}`;
-        }, 1000);
-      } else {
-        if (simulatedTimer) clearInterval(simulatedTimer);
-      }
+      video.pause();
     }
   }
 
   playBtn?.addEventListener('click', toggleVideo);
   centerPlayBtn?.addEventListener('click', toggleVideo);
-  muteBtn?.addEventListener('click', () => {
-    if (video) video.muted = !video.muted;
+
+  video?.addEventListener('play', () => updatePlayPauseUI(true));
+  video?.addEventListener('pause', () => updatePlayPauseUI(false));
+  video?.addEventListener('ended', () => {
+    updatePlayPauseUI(false);
+    if (scrubBar) scrubBar.value = 0;
+    if (timeDisplay) timeDisplay.textContent = `00:00 / ${formatTime(getVideoDuration())}`;
   });
-  fsBtn?.addEventListener('click', () => {
-    if (videoWrapper) {
-      if (!document.fullscreenElement) videoWrapper.requestFullscreen().catch(() => {});
-      else document.exitFullscreen().catch(() => {});
+
+  // 3. Timeline Slider & Timestamps
+  function updateTimeline() {
+    if (!video) return;
+    const dur = getVideoDuration();
+    if (scrubBar) {
+      scrubBar.max = dur;
+      if (!isUserScrubbing) {
+        scrubBar.value = video.currentTime;
+      }
+    }
+    if (timeDisplay) {
+      const cur = isUserScrubbing ? parseFloat(scrubBar.value) : video.currentTime;
+      timeDisplay.textContent = `${formatTime(cur)} / ${formatTime(dur)}`;
+    }
+  }
+
+  video?.addEventListener('loadedmetadata', () => {
+    updateTimeline();
+  });
+  video?.addEventListener('durationchange', () => {
+    updateTimeline();
+  });
+  video?.addEventListener('timeupdate', () => {
+    updateTimeline();
+  });
+
+  scrubBar?.addEventListener('input', () => {
+    isUserScrubbing = true;
+    if (video && scrubBar) {
+      const targetTime = parseFloat(scrubBar.value);
+      video.currentTime = targetTime;
+      const dur = getVideoDuration();
+      if (timeDisplay) {
+        timeDisplay.textContent = `${formatTime(targetTime)} / ${formatTime(dur)}`;
+      }
     }
   });
+
+  scrubBar?.addEventListener('change', () => {
+    if (video && scrubBar) {
+      video.currentTime = parseFloat(scrubBar.value);
+    }
+    isUserScrubbing = false;
+  });
+
+  // 4. Volume Controller (slider for bigger screens, mute / full volume toggle for smaller screens)
+  function updateVolumeUI() {
+    if (!video) return;
+    const isMuted = video.muted || video.volume === 0;
+    const vol = isMuted ? 0 : video.volume;
+
+    // Update volume icons
+    if (volIconMute) volIconMute.style.display = isMuted ? 'block' : 'none';
+    if (volIconLow) volIconLow.style.display = !isMuted && vol < 0.5 ? 'block' : 'none';
+    if (volIconHigh) volIconHigh.style.display = !isMuted && vol >= 0.5 ? 'block' : 'none';
+
+    // Update volume slider value
+    if (volumeSlider) {
+      volumeSlider.value = vol;
+      volumeSlider.setAttribute('title', `Volume: ${Math.round(vol * 100)}%`);
+    }
+
+    if (muteBtn) {
+      muteBtn.setAttribute('title', isMuted ? 'Unmute' : 'Mute');
+    }
+  }
+
+  // Volume slider interaction (desktop/tablets)
+  volumeSlider?.addEventListener('input', () => {
+    if (!video || !volumeSlider) return;
+    const val = parseFloat(volumeSlider.value);
+    video.volume = val;
+    if (val > 0) {
+      video.muted = false;
+      lastVolume = val;
+    } else {
+      video.muted = true;
+    }
+    updateVolumeUI();
+  });
+
+  // Mute button interaction:
+  // On smaller screens where slider is hidden, toggles between Mute (0) and Full Volume (1.0)
+  // On bigger screens, toggles mute/unmute preserving previous volume
+  muteBtn?.addEventListener('click', () => {
+    if (!video) return;
+    romanticAudio.playHeartClick();
+
+    const isSmallScreen = window.innerWidth < 640; // sm breakpoint
+    const isMuted = video.muted || video.volume === 0;
+
+    if (isMuted) {
+      video.muted = false;
+      if (isSmallScreen) {
+        // Full volume on smaller screens when unmuting
+        video.volume = 1.0;
+        lastVolume = 1.0;
+      } else {
+        // Restore last volume or 0.7 on bigger screens
+        video.volume = lastVolume > 0 ? lastVolume : 0.7;
+      }
+    } else {
+      lastVolume = video.volume > 0 ? video.volume : 0.7;
+      video.muted = true;
+    }
+    updateVolumeUI();
+  });
+
+  video?.addEventListener('volumechange', updateVolumeUI);
+  updateVolumeUI();
+
+  // 5. Fullscreen Controller & Double-Click Support
+  let lastFsToggleTime = 0;
+
+  function updateFullscreenUI() {
+    const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    if (fsIconEnter) fsIconEnter.style.display = isFs ? 'none' : 'block';
+    if (fsIconExit) fsIconExit.style.display = isFs ? 'block' : 'none';
+    if (fsBtn) fsBtn.setAttribute('title', isFs ? 'Exit Fullscreen' : 'Fullscreen (or double-click video)');
+  }
+
+  function toggleFullscreen() {
+    const now = Date.now();
+    if (now - lastFsToggleTime < 400) return; // Debounce guard: prevent duplicate rapid trigger
+    lastFsToggleTime = now;
+
+    romanticAudio.playHeartClick();
+    if (!videoWrapper) return;
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      if (videoWrapper.requestFullscreen) {
+        videoWrapper.requestFullscreen().catch(() => {});
+      } else if (videoWrapper.webkitRequestFullscreen) {
+        videoWrapper.webkitRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    }
+  }
+
+  fsBtn?.addEventListener('click', toggleFullscreen);
+
+  // Double-click on video or video-wrapper toggles fullscreen
+  let videoClickTimer = null;
+
+  video?.addEventListener('click', (e) => {
+    if (e.target.closest('#video-controls-bar')) return;
+
+    if (videoClickTimer) {
+      // Second click within 260ms -> cancel single-click play/pause and toggle fullscreen!
+      clearTimeout(videoClickTimer);
+      videoClickTimer = null;
+      toggleFullscreen();
+    } else {
+      // First click -> wait 260ms before toggling play/pause
+      videoClickTimer = setTimeout(() => {
+        videoClickTimer = null;
+        toggleVideo();
+      }, 260);
+    }
+  });
+
+  // Explicit dblclick fallback on video wrapper (except controls bar)
+  videoWrapper?.addEventListener('dblclick', (e) => {
+    if (e.target.closest('#video-controls-bar')) return;
+    e.preventDefault();
+    if (videoClickTimer) {
+      clearTimeout(videoClickTimer);
+      videoClickTimer = null;
+    }
+    toggleFullscreen();
+  });
+
+  document.addEventListener('fullscreenchange', updateFullscreenUI);
+  document.addEventListener('webkitfullscreenchange', updateFullscreenUI);
 
   // Screen 4 -> 5
   document.getElementById('final-surprise-btn')?.addEventListener('click', () => {
