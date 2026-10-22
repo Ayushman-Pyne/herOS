@@ -10,7 +10,7 @@
 const storyData = {
   recipientName: 'Debannita',
   senderName: 'Ayushman',
-  birthdayDate: '22 August',
+  birthdayDate: '3rd November',
   passcode: '2222',
   validUserId: 'they_boooo',
   heroQuote: 'Today is all about you and all the happiness you bring into my life every single day.',
