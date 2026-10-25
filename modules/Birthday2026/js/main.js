@@ -10,8 +10,13 @@
 const storyData = {
   recipientName: 'Debannita',
   senderName: 'Ayushman',
+<<<<<<< Updated upstream
   birthdayDate: '3rd November',
   passcode: '2222',
+=======
+  birthdayDate: '3rd October',
+  passcode: '0310',
+>>>>>>> Stashed changes
   validUserId: 'they_boooo',
   heroQuote: 'Today is all about you and all the happiness you bring into my life every single day.',
   memories: [
@@ -98,9 +103,9 @@ const storyData = {
 // 2. Authentication Validator
 function validateLogin(username, password) {
   const cleanUser = (username || '').trim().toLowerCase();
-  const cleanPass = (password || '').trim();
+  const cleanPass = (password || '').trim().replace(/[\/\-\s]/g, '');
   const isValidUser = cleanUser === 'they_boooo' || cleanUser === '@they_boooo';
-  const isValidPass = cleanPass === '3101';
+  const isValidPass = cleanPass === '0310' || cleanPass === '310' || cleanPass === '3101';
   return isValidUser && isValidPass;
 }
 
