@@ -10,13 +10,8 @@
 const storyData = {
   recipientName: 'Debannita',
   senderName: 'Ayushman',
-<<<<<<< Updated upstream
   birthdayDate: '3rd November',
-  passcode: '2222',
-=======
-  birthdayDate: '3rd October',
-  passcode: '0310',
->>>>>>> Stashed changes
+  passcode: '3101',
   validUserId: 'they_boooo',
   heroQuote: 'Today is all about you and all the happiness you bring into my life every single day.',
   memories: [
@@ -26,28 +21,28 @@ const storyData = {
       subtitle: 'Pure Happiness',
       imageSrc: './assets/polaroid-1-hehe.jpg',
       fallbackSvg: './assets/polaroid-1.svg',
-      date: 'First Date',
-      story: 'The day we laughed until our stomachs hurt. I knew right then and there that your smile would forever be my favorite sight.',
+      date: 'I Love You...',
+      story: 'Look at those eyes, that smile AHHH goddamn that smile😩. I will be honest I did not fall in love with you on the first day we met. But over time I rose up in love with you. Every second, everytime you look at me, every time your hand brushes against mine, I rise towards you more and more. (\"DHOP\" bolbi ik but to prove dhop na... just look at my smile...🥺)',
       rotation: -3,
     },
     {
       id: 'mem-2',
-      title: 'Our Favorite Moment',
+      title: 'Our (My) Favorite Moment',
       subtitle: 'Golden Hour Glow',
       imageSrc: './assets/polaroid-2-1.jpg',
       fallbackSvg: './assets/polaroid-2.svg',
-      date: 'Sunset Beach Walk',
-      story: 'Watching the sky turn into shades of gold and pink while listening to the waves. The world disappeared, and it was just us.',
+      date: 'Ki Bolli tui??🧐',
+      story: 'Random picture ik but i freaking love this picture YOU LOOK SOOOOO CUTEEEEEEEEEEEEEEEEEE. Idk ki level er c chilam i used to think i dont deserve you... but you have made me realise je I WILL MOVE MOUNTAINS to be deserving of YOU...😅',
       rotation: 2,
     },
     {
       id: 'mem-3',
       title: 'Together Forever',
-      subtitle: 'Mountain Adventure',
+      subtitle: 'To the moon and back',
       imageSrc: './assets/polaroid-3-4-3.jpg',
       fallbackSvg: './assets/polaroid-3.svg',
-      date: 'Scenic Getaway',
-      story: 'Standing at the peak overlooking the misty valleys, holding your hand. Every journey with you feels like an adventure.',
+      date: 'Please Can we be?🥺',
+      story: 'The most precious picture of us in my eyes. Idk why but everytime i look at this picture i just want to hug you so tight... i want to be yours and only yours. I want to experience every little thing with you... just with you...😔',
       rotation: -2,
     },
     {
@@ -57,7 +52,7 @@ const storyData = {
       imageSrc: './assets/polaroid-4.jpg',
       fallbackSvg: './assets/polaroid-4.svg',
       date: 'Quiet Evening Coffee',
-      story: 'No matter where we are or what we do, anywhere with you is where I feel most at home and completely at peace.',
+      story: 'I remember this day... feels like ages ago... but still feels like yesterday... You wanted to leave... You were not really mine then... BUT YOU MADE ME FEEL LIKE I ONLY BELONGED TO ONE PERSON IN THIS ENTIRE UNIVERSE... No matter where we are or what we do, anywhere with you is where I feel most at home and completely at peace.',
       rotation: 3,
     },
   ],
@@ -75,7 +70,7 @@ const storyData = {
     'I hope this birthday brings you as much joy as you bring into mine.',
   ],
   letterClosing: 'Forever yours, Ayushman',
-  cakeMessage: 'Thank you for being my happiness, my love and my everything. Forever yours, Ayushman 💖',
+  cakeMessage: 'Thank you for being my happiness, my love and my everything. Forever yours, Ayushman 💖 (For the longer version you have to wait🤪)',
   milestones: [
     {
       id: 'our-story',
@@ -103,9 +98,9 @@ const storyData = {
 // 2. Authentication Validator
 function validateLogin(username, password) {
   const cleanUser = (username || '').trim().toLowerCase();
-  const cleanPass = (password || '').trim().replace(/[\/\-\s]/g, '');
+  const cleanPass = (password || '').trim();
   const isValidUser = cleanUser === 'they_boooo' || cleanUser === '@they_boooo';
-  const isValidPass = cleanPass === '0310' || cleanPass === '310' || cleanPass === '3101';
+  const isValidPass = cleanPass === '3101';
   return isValidUser && isValidPass;
 }
 

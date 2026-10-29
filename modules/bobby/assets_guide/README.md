@@ -17,11 +17,9 @@ modules/bobby/
 │   └── bobbystyles.css      # Editorial styling, typography & layout
 ├── js/
 │   └── bobbyscript.js       # GSAP drag canvas, zoom inspector & sound engine
-├── assets/
-│   ├── images/              # 📸 All photo portraits displayed on the canvas
-│   └── sounds/              # 🎵 Optional custom UI sound effect files
-└── assets_guide/
-    └── README.md            # 📖 This media guide
+└── assets/
+    ├── images/              # 📸 All photo portraits displayed on the canvas
+    └── sounds/              # 🎵 Optional custom UI sound effect files
 ```
 
 ---
